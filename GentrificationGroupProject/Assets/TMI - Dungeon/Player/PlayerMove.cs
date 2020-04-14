@@ -4,67 +4,35 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] private string horizontalInputName;
-    [SerializeField] private string verticalInputName;
-    [SerializeField] private float movementSpeed;
-
-    private CharacterController charController;
-
-    [SerializeField] private AnimationCurve jumpFallOff;
-    [SerializeField] private float jumpMultiplier;
-    [SerializeField] private KeyCode jumpKey;
-
-
-    private bool isJumping;
-
-    private void Awake()
-    {
-        charController = GetComponent<CharacterController>();
-    }
-
+  private float speed = 5f;
     private void Update()
     {
         PlayerMovement();
     }
-
+    //Movement Function
     private void PlayerMovement()
     {
-        float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
-        float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
-
-        Vector3 forwardMovement = transform.forward * vertInput;
-        Vector3 rightMovement = transform.right * horizInput;
-
-        charController.SimpleMove(forwardMovement + rightMovement);
-
-        JumpInput();
-
+      Vector3 pos = transform.position;
+            //Movement Function for moving Up
+            if (Input.GetKey ("w") || Input.GetKey (KeyCode.UpArrow)) {
+                pos.z += speed * Time.deltaTime;
+            }
+            //Movement Function for moving left
+            if (Input.GetKey ("s") || Input.GetKey (KeyCode.DownArrow)) {
+                pos.z -= speed * Time.deltaTime;
+            }
+            //Movement Function for moving right
+            if (Input.GetKey ("d") || Input.GetKey (KeyCode.RightArrow)) {
+                pos.x += speed * Time.deltaTime;
+            }
+            //Movement Function for moving down
+            if (Input.GetKey ("a") || Input.GetKey (KeyCode.LeftArrow)) {
+                pos.x -= speed * Time.deltaTime;
+            }
+            transform.position = pos;
     }
 
-    private void JumpInput()
-    {
-        if(Input.GetKeyDown(jumpKey) && !isJumping)
-        {
-            isJumping = true;
-            StartCoroutine(JumpEvent());
-        }
-    }
 
-    private IEnumerator JumpEvent()
-    {
-        charController.slopeLimit = 90.0f;
-        float timeInAir = 0.0f;
 
-        do
-        {
-            float jumpForce = jumpFallOff.Evaluate(timeInAir);
-            charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
-            timeInAir += Time.deltaTime;
-            yield return null;
-        } while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
-
-        charController.slopeLimit = 45.0f;
-        isJumping = false;
-    }
 
 }
