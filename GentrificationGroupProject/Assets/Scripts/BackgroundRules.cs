@@ -57,7 +57,7 @@ public class BackgroundRules : MonoBehaviour {
         billsPaid();
 
         textStatus.text = "Health: " + health.ToString();
-        textBills.text = "Upcoming Bills: " + upcomingBills.ToString();
+        //textBills.text = "Upcoming Bills: " + upcomingBills.ToString();
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         textDate.text = "Date: " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
         textSavings.text = "Savings: $ " + savings.ToString();
@@ -170,7 +170,7 @@ public class BackgroundRules : MonoBehaviour {
             cellPaid = false;
         }
         if(currentDay == 28) {
-            upcomingBills = bills[0];
+            //upcomingBills = bills[0];
         }
 
         if(currentDay >= 3 && rentPaid == false) {
