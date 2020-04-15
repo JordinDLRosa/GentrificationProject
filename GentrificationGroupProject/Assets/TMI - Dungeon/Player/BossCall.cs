@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BossCall : MonoBehaviour
 {
   public GameObject uiObject;
+  public int debt;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +27,7 @@ public class BossCall : MonoBehaviour
     {
       if(other.tag == "Player")
       {
+        debt = PlayerMove.funds = PlayerMove.funds - 200;
         Destroy(uiObject);
         Destroy(gameObject);
       }

@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
+  public static int funds = 5000;
   private float speed = 5f;
+  public Text fundsText;
     private void Update()
     {
         PlayerMovement();
+        Debug.Log("funds = "+ funds);
+        fundsCountText();
     }
     //Movement Function
     private void PlayerMovement()
@@ -32,7 +37,8 @@ public class PlayerMove : MonoBehaviour
             transform.position = pos;
     }
 
-
-
-
+    void fundsCountText()
+    {
+      fundsText.text = "Funds: $" + funds.ToString ();
+    }
 }
