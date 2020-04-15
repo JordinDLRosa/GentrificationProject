@@ -18,10 +18,22 @@ public class BackgroundRules : MonoBehaviour {
     private bool paid = true;
 
     // this will be the part of the game that monitors your health
-    private string[] status = { "sick", "normal", "hungry", "sick & hungry", "dead" };
+    private string[] status = { "Sick", "Normal", "Hungry", "Sick & Hungry", "Dead" };
     private bool eaten = false;
     private int daysHungry = 0;
-    private string health = "";
+    private string health;
+
+    // This will be the part of the game that monitors the upcoming bills.
+    private string rent = "Rent";
+    private string[] billS = {"Rent", "Gas Bill", "Electricity Bill", "Phone Bill"};
+
+
+    private string[] upcomingBills = { };
+    private int[] costLiving = {600, 50, 100, 100};
+    private bool rentPaid = false;
+    private bool gasPaid = false;
+    private bool electricityPaid = false;
+    private bool cellPaid = false;
 
 
     // These are the text objects
@@ -29,6 +41,7 @@ public class BackgroundRules : MonoBehaviour {
     public Text textTime;
     public Text textSavings;
     public Text textStatus;
+    public Text textBills;
 
     // Start is called before the first frame update
     void Start() {
@@ -41,11 +54,13 @@ public class BackgroundRules : MonoBehaviour {
         monitorTime();
         monitorPayDay();
         monitorHealth();
+        billsPaid();
 
-        textStatus.text = health.ToString();
+        textStatus.text = "Health: " + health.ToString();
+        textBills.text = "Upcoming Bills: " + upcomingBills.ToString();
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         textDate.text = "Date: " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
-        textSavings.text = ("$" + savings).ToString();
+        textSavings.text = "Savings: $ " + savings.ToString();
     }
 
     private void monitorTime() {
@@ -145,6 +160,37 @@ public class BackgroundRules : MonoBehaviour {
             savings += 600;
             paid = true;
         }
+    }
+
+    private void billsPaid() {
+        if (currentDay == 1) {
+            rentPaid = false;
+            gasPaid = false;
+            electricityPaid = false;
+            cellPaid = false;
+        }
+        if(currentDay == 28) {
+            upcomingBills = bills[0];
+        }
+
+        if(currentDay >= 3 && rentPaid == false) {
+            savings -= 600;
+            rentPaid = true;
+        }
+        if (currentDay >= 2 && gasPaid == false) {
+            savings -= costLiving[1];
+            gasPaid = true;
+        }
+        if (currentDay >= 12 && electricityPaid == false) {
+            savings -= costLiving[2];
+            electricityPaid = true;
+        }
+        if (currentDay >= 15 && cellPaid == false) {
+            savings -= costLiving[3];
+            cellPaid = true;
+        }
+
+
     }
 
 } // end of class
