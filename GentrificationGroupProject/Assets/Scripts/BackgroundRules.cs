@@ -5,10 +5,11 @@ using UnityEngine.UI;
 public class BackgroundRules : MonoBehaviour {
 
     // these are the time and date parts of the game
+    private int currentMonth = 12;
+    private int currentDay = 31;
+    private int currentYear = 19;
     private int currentHour = 6;
     private float timeStart = 0f;
-    private int currentMonth = 01;
-    private int currentDay = 27;
     private int lastDay;
     private int lastHour = 11;
 
@@ -17,7 +18,7 @@ public class BackgroundRules : MonoBehaviour {
     private bool paid = true;
 
     // this will be the part of the game that monitors your health
-    private string[] status = { "sick", "normal", "hungry", "sick & hungry" };
+    private string[] status = { "sick", "normal", "hungry", "sick & hungry", "dead" };
     private bool eaten = false;
     private int daysHungry = 0;
     private string health = "";
@@ -42,8 +43,8 @@ public class BackgroundRules : MonoBehaviour {
         monitorHealth();
 
         textStatus.text = health.ToString();
-        textTime.text = currentHour + ":" + (Mathf.Round(timeStart).ToString());
-        textDate.text = (currentMonth + "/" + currentDay).ToString();
+        textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
+        textDate.text = "Date: " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
         textSavings.text = ("$" + savings).ToString();
     }
 
@@ -75,13 +76,22 @@ public class BackgroundRules : MonoBehaviour {
             // this puts you at hungry
             health = status[2];
         }
-        if (daysHungry > 7 & health == status[2]) {
-            // this puts you at hungry
+        if (daysHungry > 2 & health == status[2]) {
+            // this puts you at hungry and sick
             health = status[3];
+        }
+        if (daysHungry > 4 & health == status[3]) {
+            // this puts you at hungry and sick
+            health = status[4];
         }
     }
 
     private void monitorDate() {
+        if (currentDay > lastDay && currentMonth == 12) {
+            currentMonth = 1;
+            currentDay = 1;
+            currentYear++;
+        }
         if (currentMonth == 01) {
             lastDay = 31;
         }
@@ -126,7 +136,6 @@ public class BackgroundRules : MonoBehaviour {
     }
 
     private void monitorPayDay() {
-
         // ensures you get a single payment
         if (currentDay == 6 || currentDay == 13 || currentDay == 20 || currentDay == 27) {
             paid = false;
