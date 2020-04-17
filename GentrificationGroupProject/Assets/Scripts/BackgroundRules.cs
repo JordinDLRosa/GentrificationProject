@@ -19,10 +19,14 @@ public class BackgroundRules : MonoBehaviour {
     private bool paid = true;
 
     // this will be the part of the game that monitors your health
-    private string[] status = { "Sick", "Normal", "Hungry", "Sick & Hungry", "Dead" };
+    private string[] status = { "Sick", "Normal", "Hungry", "Sick & Hungry"};
     private bool eaten = false;
     private int daysHungry = 0;
     private string health;
+
+    // This will be used to manage the stress bars color.
+    SpriteRenderer stressBar;
+
 
     // This will be the part of the game that monitors the upcoming bills.
 
@@ -43,14 +47,17 @@ public class BackgroundRules : MonoBehaviour {
     public Text textSavings;
     public Text textStatus;
     public Text textBills;
+    public GameObject StressBarBox;
 
     // Start is called before the first frame update
     void Start() {
         health = status[1];
+        stressBar = StressBarBox.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update() {
+        stressBar.color = Color.black;
         monitorDate();
         monitorTime();
         monitorPayDay();
@@ -95,10 +102,6 @@ public class BackgroundRules : MonoBehaviour {
         if (daysHungry > 2 & health == status[2]) {
             // this puts you at hungry and sick
             health = status[3];
-        }
-        if (daysHungry > 4 & health == status[3]) {
-            // this puts you at hungry and sick
-            health = status[4];
         }
     }
 
