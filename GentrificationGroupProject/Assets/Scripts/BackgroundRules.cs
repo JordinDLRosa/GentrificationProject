@@ -7,7 +7,7 @@ public class BackgroundRules : MonoBehaviour {
 
     // these are the time and date parts of the game
     private int currentMonth = 12;
-    private int currentDay = 31;
+    private int currentDay = 26;
     private int currentYear = 19;
     private int currentHour = 6;
     private float timeStart = 0f;
@@ -19,7 +19,7 @@ public class BackgroundRules : MonoBehaviour {
     private bool paid = true;
 
     // this will be the part of the game that monitors your health
-    private string[] status = { "Sick", "Normal", "Hungry", "Sick & Hungry"};
+    private string[] status = { "Normal", "Sick", "Hungry", "Sick & Hungry"}; 
     private bool eaten = false;
     private int daysHungry = 0;
     private string health;
@@ -29,17 +29,14 @@ public class BackgroundRules : MonoBehaviour {
 
 
     // This will be the part of the game that monitors the upcoming bills.
-
     private string[] bills = {"Rent", "Gas Bill", "Electricity Bill", "Phone Bill"};
-
-
-    private string[] upcomingBills = { };
+    private string[] dueBills = {"paid", "paid", "paid", "paid" };
     private int[] costLiving = {600, 50, 100, 100};
+    private int paidBills = 0;
     private bool rentPaid = false;
     private bool gasPaid = false;
     private bool electricityPaid = false;
     private bool cellPaid = false;
-
 
     // These are the text objects
     public Text textDate;
@@ -57,15 +54,14 @@ public class BackgroundRules : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        stressBar.color = Color.black;
+        stressBar.color = Color.white;
         monitorDate();
         monitorTime();
         monitorPayDay();
         monitorHealth();
         billsPaid();
-
+        upcomingBills();
         textStatus.text = "Health: " + health.ToString();
-        //textBills.text = "Upcoming Bills: " + upcomingBills.ToString();
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         textDate.text = "Date: " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
         textSavings.text = "Savings: $ " + savings.ToString();
@@ -76,7 +72,6 @@ public class BackgroundRules : MonoBehaviour {
         float speedUp = 10;
         //
         timeStart += Time.deltaTime * speedUp;
-
 
         if (currentHour >= lastHour) {
             currentHour = 6;
@@ -93,24 +88,19 @@ public class BackgroundRules : MonoBehaviour {
 
     private void monitorHealth() {
         if (daysHungry == 0) {
-            health = status[1];
+            health = status[0];
         }
         if (daysHungry > 0) {
             // this puts you at hungry
-            health = status[2];
+            health = status[1];
         }
-        if (daysHungry > 2 & health == status[2]) {
+        if (daysHungry > 2 & health == status[1]) {
             // this puts you at hungry and sick
-            health = status[3];
+            health = status[2];
         }
     }
 
     private void monitorDate() {
-        if (currentDay > lastDay && currentMonth == 12) {
-            currentMonth = 1;
-            currentDay = 1;
-            currentYear++;
-        }
         if (currentMonth == 01) {
             lastDay = 31;
         }
@@ -147,7 +137,11 @@ public class BackgroundRules : MonoBehaviour {
         if (currentMonth == 12) {
             lastDay = 31;
         }
-
+        if (currentDay > lastDay && currentMonth == 12) {
+            currentMonth = 1;
+            currentDay = 1;
+            currentYear++;
+        }
         if (currentDay > lastDay) {
             currentMonth++;
             currentDay = 1;
@@ -167,14 +161,13 @@ public class BackgroundRules : MonoBehaviour {
     }
 
     private void billsPaid() {
-        if (currentDay == 1) {
+        if (currentDay == 2) {
             rentPaid = false;
             gasPaid = false;
             electricityPaid = false;
             cellPaid = false;
         }
         if(currentDay == 28) {
-           // upcomingBills[0] = bills[0];
         }
 
         if(currentDay >= 3 && rentPaid == false) {
@@ -185,16 +178,45 @@ public class BackgroundRules : MonoBehaviour {
             savings -= costLiving[1];
             gasPaid = true;
         }
-        if (currentDay >= 13 && electricityPaid == false) {
+        if (currentDay >= 17 && electricityPaid == false) {
             savings -= costLiving[2];
             electricityPaid = true;
         }
-        if (currentDay >= 15 && cellPaid == false) {
+        if (currentDay >= 23 && cellPaid == false) {
             savings -= costLiving[3];
             cellPaid = true;
         }
 
 
+    }
+
+    private void upcomingBills() {
+        if (currentDay == 27) {
+            dueBills[0] = bills[0]; // changes dueBills[0] to bills[0] and marks it as rent.
+        }
+        if (currentDay == 27) {
+            dueBills[1] = bills[1]; // changes dueBills[1] to bills[1] and marks it as Gas Bill.
+        }
+        if (currentDay == 10) {
+            dueBills[2] = bills[2]; // changes dueBills[2] to bills[2] and marks it as Electricity Bill.
+        }
+        if (currentDay == 23) {
+            dueBills[3] = bills[3]; // changes dueBills[3] to bills[3] and marks it as Phone Bill.
+        }
+        if (dueBills.Length > 0) {
+            for(int i = 0; i < dueBills.Length; i++) {
+                if (paidBills == 4) {
+                    textBills.text = "Upcoming Bills: None".ToString();
+
+                }
+                if (dueBills[i] == "paid") {
+                    paidBills++;
+                }
+                if (dueBills[i] != "paid") {
+                    textBills.text = "Upcoming Bills: " + dueBills[i] + "\r\n".ToString();
+                }
+            }
+        }        
     }
 
 } // end of class
