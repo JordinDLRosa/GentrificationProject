@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class BackgroundRules : MonoBehaviour {
@@ -24,8 +25,8 @@ public class BackgroundRules : MonoBehaviour {
     private string health;
 
     // This will be the part of the game that monitors the upcoming bills.
-    private string rent = "Rent";
-    private string[] billS = {"Rent", "Gas Bill", "Electricity Bill", "Phone Bill"};
+    
+    private string[] bills = {"Rent", "Gas Bill", "Electricity Bill", "Phone Bill"};
 
 
     private string[] upcomingBills = { };
@@ -57,7 +58,7 @@ public class BackgroundRules : MonoBehaviour {
         billsPaid();
 
         textStatus.text = "Health: " + health.ToString();
-        textBills.text = "Upcoming Bills: " + upcomingBills.ToString();
+        //textBills.text = "Upcoming Bills: " + upcomingBills.ToString();
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         textDate.text = "Date: " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
         textSavings.text = "Savings: $ " + savings.ToString();
@@ -170,18 +171,18 @@ public class BackgroundRules : MonoBehaviour {
             cellPaid = false;
         }
         if(currentDay == 28) {
-            upcomingBills = bills[0];
+           // upcomingBills[0] = bills[0];
         }
 
         if(currentDay >= 3 && rentPaid == false) {
             savings -= 600;
             rentPaid = true;
         }
-        if (currentDay >= 2 && gasPaid == false) {
+        if (currentDay >= 12 && gasPaid == false) {
             savings -= costLiving[1];
             gasPaid = true;
         }
-        if (currentDay >= 12 && electricityPaid == false) {
+        if (currentDay >= 13 && electricityPaid == false) {
             savings -= costLiving[2];
             electricityPaid = true;
         }
