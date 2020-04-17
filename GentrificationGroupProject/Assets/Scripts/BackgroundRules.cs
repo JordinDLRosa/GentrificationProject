@@ -25,7 +25,7 @@ public class BackgroundRules : MonoBehaviour {
     private string health;
 
     // This will be the part of the game that monitors the upcoming bills.
-    
+
     private string[] bills = {"Rent", "Gas Bill", "Electricity Bill", "Phone Bill"};
 
 
@@ -195,4 +195,3 @@ public class BackgroundRules : MonoBehaviour {
     }
 
 } // end of class
-
