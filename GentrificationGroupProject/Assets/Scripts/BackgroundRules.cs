@@ -11,6 +11,15 @@ public class BackgroundRules : MonoBehaviour {
     private int currentDayOfTheWeek = 0;
     private int maxDayOfTheWeek = 6;
 
+    // These are the part of the game that will show a life event
+    // total life events so far: 5 : so 0 - 4
+    System.Random randomEvent = new System.Random();
+    private string[] lifeEvent = { "Got into an accident at work, I have to pay medical bills",
+        "The toilet got clogged... called a plumber. Have to pay this repair bill",
+        "Rodents in the house, had to call an exterminator", "Family called asking for money", "Friend called asking me for money"};
+    private int[] lifeEventCost = { 200, 50, 50, 100, 75};
+    private bool luckDecidedAlready = true;
+
     // these are the time and date parts of the game
     private int currentMonth = 12;
     private int currentDay = 25;
@@ -172,6 +181,7 @@ public class BackgroundRules : MonoBehaviour {
         // ensures you get a single payment
         if (currentDay == 6 || currentDay == 13 || currentDay == 20 || currentDay == 27) {
             paid = false;
+            luckDecidedAlready = false;
         }
         // on the 7th it should be payday all day. but you will actually be paid tomorrow
         if (currentDay % 7 == 0 && paid == false) {
@@ -233,7 +243,7 @@ public class BackgroundRules : MonoBehaviour {
         if (currentDay == 27 && rentPaid == false) {
             savings -= 1300;
             rentPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[0],"");
+            billsDisplayed = billsDisplayed.Replace(bills[0], "");
             dueBills.Remove(bills[0]);
             totalBillsDues -= livingCost[0];
             updateBill = true;
@@ -277,7 +287,14 @@ public class BackgroundRules : MonoBehaviour {
         displayedBills = true;
     }
     private void lifeSucks() {
-
+        if(currentDay % 14 == 0 && luckDecidedAlready == false) {
+            int luck = randomEvent.Next(1, 100000);
+            int lifeEventHappened = randomEvent.Next(1,6);
+            if (luck < 5 && luck > 1) {
+                Debug.Log(lifeEvent[lifeEventHappened]);
+            }
+        }
+        luckDecidedAlready = true;
     }
     private void stressBarChange() {
         if (health == "Normal") {
