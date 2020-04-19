@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 692a5272336e31242ac38c82cb7f4476
+  - enabled: 1
+    path: Assets/Scenes/Dialogue.unity
+    guid: 43fe266672228c34c8c63a55ccdeac07
+  - enabled: 1
+    path: Assets/Scenes/Apartment.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
