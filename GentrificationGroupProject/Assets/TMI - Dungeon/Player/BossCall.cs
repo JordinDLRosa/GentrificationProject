@@ -7,7 +7,7 @@ public class BossCall : MonoBehaviour
 {
   public GameObject uiObject;
   public GameObject Object2;
-  public int debt;
+  public BackgroundRules _backgroundRules;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,10 +28,7 @@ public class BossCall : MonoBehaviour
     {
       if(other.tag == "Player")
       {
-        debt = PlayerMove.funds = PlayerMove.funds - 200;
-        Destroy(uiObject);
-        Destroy(gameObject);
-        Destroy(Object2);
+        _backgroundRules.billsPaid();
       }
     }
 }

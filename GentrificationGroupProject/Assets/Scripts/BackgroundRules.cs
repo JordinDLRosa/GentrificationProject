@@ -230,7 +230,7 @@ public class BackgroundRules : MonoBehaviour {
             totalBillsDues += livingCost[3]; // adds Phone Bill to the totalBillsDue.
         }
     }
-    private void billsPaid() {
+    public void billsPaid() {
         if (currentDay < 2) {
             rentPaid = false;
             gasPaid = false;
