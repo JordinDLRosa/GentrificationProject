@@ -63,6 +63,13 @@ public class GamePlayManager : MonoBehaviour {
     public bool updateBill = false;
     public bool displayedBills = false;
 
+    // bools for triggering the auto pay
+    public bool autoRent = false;
+    public bool autoGas = false;
+    public bool autoElectric = false;
+    public bool autoCell = false;
+
+
     // These are the text objects
     public Text textDate;
     public Text textTime;
@@ -241,7 +248,7 @@ public class GamePlayManager : MonoBehaviour {
         // Forcefully Takes money from your savings account.
 
         // Last day to Pay your Rent.
-        if (currentDay == 5 && rentPaid == false) {
+        if (currentDay == 5 && rentPaid == false && autoRent == true) {
             savings -= 1300;
             rentPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[0], "");
@@ -252,7 +259,7 @@ public class GamePlayManager : MonoBehaviour {
         // Last Day to Pay Your Gas Bill, unless we add the ability to manually pay
         // If so will have to code so that if you don't pay this bill by this date.
         // The price will go up by $penalty fee everyday ?
-        if (currentDay == 12 && gasPaid == false) {
+        if (currentDay == 12 && gasPaid == false && autoGas == true) {
             savings -= livingCost[1];
             gasPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[1], "");
@@ -262,7 +269,7 @@ public class GamePlayManager : MonoBehaviour {
         // Last Day to Pay Your Electricity Bill, unless we add the ability to manually pay
         // If so will have to code so that if you don't pay this bill by this date.
         // The price will go up by $penalty fee everyday ?
-        if (currentDay == 17 && electricityPaid == false) {
+        if (currentDay == 17 && electricityPaid == false && autoElectric == true) {
             savings -= livingCost[2];
             electricityPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[2], "");
@@ -272,7 +279,7 @@ public class GamePlayManager : MonoBehaviour {
         // Last Day to Pay Your Cell Bill, unless we add the ability to manually pay
         // If so will have to code so that if you don't pay this bill by this date.
         // The price will go up by $penalty fee everyday ?
-        if (currentDay == 23 && cellPaid == false) {
+        if (currentDay == 23 && cellPaid == false && autoCell == true) {
             savings -= livingCost[3];
             cellPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[3], "");
