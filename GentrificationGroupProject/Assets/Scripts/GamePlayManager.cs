@@ -239,7 +239,7 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
     public void billsPaid() {
-        if (currentDay == 1) {
+        if (currentDay == lastDayOfTheMonth) {
             rentPaid = false;
             gasPaid = false;
             electricityPaid = false;
@@ -316,13 +316,34 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
 
-    public void rentCheck() {
+    public void payBills() {
         if (rentPaid == false && currentDay >= 1 && currentDay <= 5) {
-            savings -= 1300;
+            savings -= livingCost[0];
             rentPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[0], "");
             dueBills.Remove(bills[0]);
             totalBillsDues -= livingCost[0];
+            updateBill = true;
+        }
+        if (gasPaid == false && currentDay >= 5 && currentDay <= 12) {
+            savings -= livingCost[1];
+            gasPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[1], "");
+            totalBillsDues -= livingCost[1];
+            updateBill = true;
+        }
+        if (electricityPaid == false && currentDay >= 10 && currentDay <= 17) {
+            savings -= livingCost[2];
+            electricityPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[2], "");
+            totalBillsDues -= livingCost[2];
+            updateBill = true;
+        }
+        if (cellPaid == false && currentDay >= 16 && currentDay <= 23) {
+            savings -= livingCost[3];
+            cellPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[3], "");
+            totalBillsDues -= livingCost[3];
             updateBill = true;
         }
     }
