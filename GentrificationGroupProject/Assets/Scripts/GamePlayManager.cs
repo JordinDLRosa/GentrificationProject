@@ -103,7 +103,7 @@ public class GamePlayManager : MonoBehaviour {
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         // remove this:
-        float speedUp = 10;
+        float speedUp = 30;
         //
         timeStart += Time.deltaTime * speedUp;
 
