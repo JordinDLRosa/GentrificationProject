@@ -45,6 +45,7 @@ public class playerInteraction : MonoBehaviour {
             if (Physics.Raycast(ray, out hit, 100.0f)) {
                 if (hit.transform != null) {
                     DisplayObject(hit.transform.gameObject);
+                    gameManagerScript.rentCheck();
                 }
             }
     }

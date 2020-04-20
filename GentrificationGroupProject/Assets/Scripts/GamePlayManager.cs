@@ -17,7 +17,7 @@ public class GamePlayManager : MonoBehaviour {
     private string[] lifeEvent = { "Got into an accident at work, I have to pay medical bills",
         "The toilet got clogged... called a plumber. Have to pay this repair bill",
         "Rodents in the house, had to call an exterminator", "Family called asking for money", "Friend called asking me for money"};
-    private int[] lifeEventCost = { 200, 50, 50, 100, 75};
+    private int[] lifeEventCost = { 200, 50, 50, 100, 75 };
     private bool luckDecidedAlready = true;
 
     // these are the time and date parts of the game
@@ -103,7 +103,7 @@ public class GamePlayManager : MonoBehaviour {
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         // remove this:
-        float speedUp = 10;
+        float speedUp = 100;
         //
         timeStart += Time.deltaTime * speedUp;
 
@@ -239,7 +239,7 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
     public void billsPaid() {
-        if (currentDay < 2) {
+        if (currentDay == 1) {
             rentPaid = false;
             gasPaid = false;
             electricityPaid = false;
@@ -295,9 +295,9 @@ public class GamePlayManager : MonoBehaviour {
         displayedBills = true;
     }
     private void lifeSucks() {
-        if(currentDay % 14 == 0 && luckDecidedAlready == false) {
+        if (currentDay % 14 == 0 && luckDecidedAlready == false) {
             int luck = randomEvent.Next(1, 100000);
-            int lifeEventHappened = randomEvent.Next(1,6);
+            int lifeEventHappened = randomEvent.Next(1, 6);
             if (luck < 5 && luck > 1) {
                 Debug.Log(lifeEvent[lifeEventHappened]);
             }
@@ -314,6 +314,21 @@ public class GamePlayManager : MonoBehaviour {
         if (health == "Sick") {
             stressBar.color = Color.green;
         }
+    }
+
+    public void rentCheck() {
+        if (rentPaid == false && currentDay >= 1 && currentDay <= 5) {
+            savings -= 1300;
+            rentPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[0], "");
+            dueBills.Remove(bills[0]);
+            totalBillsDues -= livingCost[0];
+            updateBill = true;
+        }
+    }
+
+    public void noAdvanceBill() {
+        // add a check to ensure you dont get bills early
     }
 
 } // end of class
