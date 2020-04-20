@@ -37,7 +37,7 @@ public class GamePlayManager : MonoBehaviour {
     // this will be the part of the game that monitors your health
     private string[] status = { "Normal", "Hungry", "Sick", "Sick & Hungry" };
     public bool eaten = false;
-    private int daysHungry = 0;
+    public int daysHungry = 0;
     public string health;
 
     // This will be used to manage the stress bars color.
@@ -80,7 +80,7 @@ public class GamePlayManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        health = status[1];
+        health = status[0];
         stressBar = StressBarBox.GetComponent<SpriteRenderer>();
         textBills.text = "None";
     }
@@ -103,15 +103,18 @@ public class GamePlayManager : MonoBehaviour {
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         // remove this:
-        float speedUp = 100;
+        float speedUp = 20;
         //
         timeStart += Time.deltaTime * speedUp;
 
         if (currentHour >= lastHourOfTheDay) {
-            currentHour = 6;
-            currentDay++;
             if (eaten != true) {
                 daysHungry++;
+            }
+            currentHour = 6;
+            currentDay++;
+            if (eaten == true && currentHour == 6) {
+                eaten = false;
             }
         }
         if (timeStart >= 60f) {
@@ -120,6 +123,7 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
     public void monitorHealth() {
+        //{ "Normal", "Hungry", "Sick", "Sick & Hungry" };
         textStatus.text = "Status: " + health.ToString();
         if (daysHungry == 0) {
             health = status[0];
@@ -128,20 +132,21 @@ public class GamePlayManager : MonoBehaviour {
             // this puts you at hungry
             health = status[1];
         }
-        if (daysHungry > 2 & health == status[1]) {
-            // this puts you at hungry and sick
+        if (daysHungry > 4 & health == status[1]) {
+            // this puts you at sick
             health = status[2];
         }
-        if(eaten == true)
-        {
-          if(health == status[1])
-          {
-            health = status[0];
-          }
-          if(health == status[2])
-          {
-            health = status[1];
-          }
+        if (daysHungry > 6 & health == status[2]) {
+            // this puts you at hungry and sick
+            health = status[3];
+        }
+        if (eaten == true) {
+            if (health == status[1]) {
+                health = status[0];
+            }
+            if (health == status[2]) {
+                health = status[1];
+            }
         }
     }
     private void monitorDate() {
