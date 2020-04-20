@@ -48,17 +48,21 @@ public class playerInteraction : MonoBehaviour {
                     }
                     if (hit.collider.gameObject.tag == "StoveForNow") {
                         DisplayObject(hit.transform.gameObject);
+                        if (gameManagerScript.currentHour < 10) {
+                            gameManagerScript.currentHour += 1;
+                            print("You ate");
+                            gameManagerScript.eaten = true;
 
-                        gameManagerScript.eaten = true;
-
-                        if (gameManagerScript.daysHungry > 0) {
-                            gameManagerScript.daysHungry--;
+                            if (gameManagerScript.daysHungry > 0) {
+                                gameManagerScript.daysHungry--;
+                            }
+                            else {
+                                gameManagerScript.daysHungry = 0;
+                            }
                         }
                         else {
-                            gameManagerScript.daysHungry = 0;
+                            print("too late to eat");
                         }
-                        gameManagerScript.currentHour = gameManagerScript.currentHour + 1;
-                        print("You ate");
                         print(gameManagerScript.health);
                     }
                     else {

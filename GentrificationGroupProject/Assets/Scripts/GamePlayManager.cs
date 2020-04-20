@@ -22,7 +22,7 @@ public class GamePlayManager : MonoBehaviour {
 
     // these are the time and date parts of the game
     public int currentMonth = 04;
-    public int currentDay = 25;
+    public int currentDay = 29;
     // only need thsese public for access to other scripts
     private int currentYear = 20;
     public int currentHour = 6;
@@ -103,7 +103,7 @@ public class GamePlayManager : MonoBehaviour {
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         // remove this:
-        float speedUp = 20;
+        float speedUp = 10;
         //
         timeStart += Time.deltaTime * speedUp;
 

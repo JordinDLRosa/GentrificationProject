@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMonth: 4
-  currentDay: 25
+  currentDay: 29
   currentHour: 6
   savings: 1500
   eaten: 0
