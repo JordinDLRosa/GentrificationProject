@@ -1093,7 +1093,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentMonth: 4
   currentDay: 25
+  currentHour: 6
+  savings: 1500
   eaten: 0
+  health: 
   rentPaid: 0
   gasPaid: 0
   electricityPaid: 0
@@ -1462,7 +1465,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.0823072, y: -0.044536516, z: 0.0036818571, w: 0.99560463}
-  m_LocalPosition: {x: 144.8, y: 37.3, z: -67.7}
+  m_LocalPosition: {x: 144.8, y: 37.3, z: -53.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1703,6 +1706,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 91f1cc7ab3b1c5f4e823e0084f20bd3f, type: 3}
       propertyPath: m_Name
       value: Door 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 91f1cc7ab3b1c5f4e823e0084f20bd3f, type: 3}
+      propertyPath: m_TagString
+      value: Door
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91f1cc7ab3b1c5f4e823e0084f20bd3f, type: 3}
       propertyPath: m_LocalPosition.x

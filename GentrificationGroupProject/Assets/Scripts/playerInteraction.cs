@@ -56,17 +56,24 @@ public class playerInteraction : MonoBehaviour {
                         DisplayObject(hit.transform.gameObject);
                         gameManagerScript.monitorHealth();
                         gameManagerScript.eaten = true;
+                        gameManagerScript.currentHour = gameManagerScript.currentHour + 1;
                         print("You ate");
+                        print(gameManagerScript.health);
                     }
                     else
                     {
                         gameManagerScript.eaten = false;
                     }
-
+                    if (hit.collider.gameObject.tag == "Door")
+                    {
+                      //gameManagerScript.savings
+                      gameManagerScript.currentHour = gameManagerScript.currentHour + 8;
+                      print(gameManagerScript.currentHour);
+                    }
 
                 }
             }
-        
+
     }
 
     private void DisplayObject(GameObject go) {

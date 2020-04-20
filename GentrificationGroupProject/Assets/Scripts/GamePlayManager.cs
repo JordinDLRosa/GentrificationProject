@@ -25,20 +25,20 @@ public class GamePlayManager : MonoBehaviour {
     public int currentDay = 25;
     // only need thsese public for access to other scripts
     private int currentYear = 20;
-    private int currentHour = 6;
+    public int currentHour = 6;
     private float timeStart = 0f;
     private int lastDayOfTheMonth;
     private int lastHourOfTheDay = 11;
 
     // these are the money parts of the game
-    private int savings = 1500;
+    public int savings = 1500;
     private bool paid = true;
 
     // this will be the part of the game that monitors your health
     private string[] status = { "Normal", "Hungry", "Sick", "Sick & Hungry" };
     public bool eaten = false;
     private int daysHungry = 0;
-    private string health;
+    public string health;
 
     // This will be used to manage the stress bars color.
     SpriteRenderer stressBar;
@@ -121,11 +121,6 @@ public class GamePlayManager : MonoBehaviour {
     }
     public void monitorHealth() {
         textStatus.text = "Status: " + health.ToString();
-        if(eaten == true && health == status[1])
-        {
-            health = status[0];
-            
-        }
         if (daysHungry == 0) {
             health = status[0];
         }
@@ -136,6 +131,17 @@ public class GamePlayManager : MonoBehaviour {
         if (daysHungry > 2 & health == status[1]) {
             // this puts you at hungry and sick
             health = status[2];
+        }
+        if(eaten == true)
+        {
+          if(health == status[1])
+          {
+            health = status[0];
+          }
+          if(health == status[2])
+          {
+            health = status[1];
+          }
         }
     }
     private void monitorDate() {
