@@ -36,7 +36,7 @@ public class GamePlayManager : MonoBehaviour {
 
     // this will be the part of the game that monitors your health
     private string[] status = { "Normal", "Hungry", "Sick", "Sick & Hungry" };
-    private bool eaten = false;
+    public bool eaten = false;
     private int daysHungry = 0;
     private string health;
 
@@ -119,8 +119,13 @@ public class GamePlayManager : MonoBehaviour {
             currentHour++;
         }
     }
-    private void monitorHealth() {
+    public void monitorHealth() {
         textStatus.text = "Status: " + health.ToString();
+        if(eaten == true && health == status[1])
+        {
+            health = status[0];
+            
+        }
         if (daysHungry == 0) {
             health = status[0];
         }

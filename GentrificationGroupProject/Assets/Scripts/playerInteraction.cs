@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class playerInteraction : MonoBehaviour {
     private GamePlayManager gameManagerScript;
-
     private void Awake() {
         gameManagerScript = GameObject.FindObjectOfType<GamePlayManager>();
     }
@@ -44,13 +43,30 @@ public class playerInteraction : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
             if (Physics.Raycast(ray, out hit, 100.0f)) {
                 if (hit.transform != null) {
-                    DisplayObject(hit.transform.gameObject);
-                    checkRentDueDate();
-                    checkGasDueDate();
-                    checkElectricityDueDate();
-                    checkCellDueDate();
+                    if (hit.collider.gameObject.tag == "ComputerForNow")
+                    {
+                        DisplayObject(hit.transform.gameObject);
+                        checkRentDueDate();
+                        checkGasDueDate();
+                        checkElectricityDueDate();
+                        checkCellDueDate();
+                    }
+                    if (hit.collider.gameObject.tag == "StoveForNow")
+                    {
+                        DisplayObject(hit.transform.gameObject);
+                        gameManagerScript.monitorHealth();
+                        gameManagerScript.eaten = true;
+                        print("You ate");
+                    }
+                    else
+                    {
+                        gameManagerScript.eaten = false;
+                    }
+
+
                 }
             }
+        
     }
 
     private void DisplayObject(GameObject go) {
