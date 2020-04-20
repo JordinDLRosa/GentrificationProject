@@ -35,7 +35,7 @@ public class GamePlayManager : MonoBehaviour {
     private bool paid = true;
 
     // this will be the part of the game that monitors your health
-    private string[] status = { "Normal", "Hungry", "Sick", "Sick & Hungry" };
+    private string[] status = { "Normal", "Hungry", "Sick", "Sick & Hungry", "Stressed" };
     public bool eaten = false;
     public int daysHungry = 0;
     public string health;
@@ -140,6 +140,9 @@ public class GamePlayManager : MonoBehaviour {
             // this puts you at hungry and sick
             health = status[3];
         }
+        if (savings < totalBillsDues) {
+            health = status[4];
+        }
         if (eaten == true) {
             if (health == status[1]) {
                 health = status[0];
@@ -221,7 +224,7 @@ public class GamePlayManager : MonoBehaviour {
             totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
 
         }
-        else if (currentMonth != 2 && currentDay == 26 && displayedBills == false) {
+        else if (currentMonth != 2 && currentDay >= 26 && displayedBills == false) {
             updateBill = true;
             dueBills.Add(bills[0]); // adds rent to upComingBills from bills[0].
             totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
@@ -265,7 +268,7 @@ public class GamePlayManager : MonoBehaviour {
 
         // Last day to Pay your Rent.
         if (currentDay == 5 && rentPaid == false && autoRent == true) {
-            savings -= 1300;
+            savings -= livingCost[1];
             rentPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[0], "");
             dueBills.Remove(bills[0]);
@@ -329,6 +332,9 @@ public class GamePlayManager : MonoBehaviour {
         }
         if (health == "Sick") {
             stressBar.color = Color.green;
+        }
+        if (health == status[4] && savings < totalBillsDues) {
+            stressBar.color = Color.red;
         }
     }
 
