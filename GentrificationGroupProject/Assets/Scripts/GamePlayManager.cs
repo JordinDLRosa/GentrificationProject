@@ -85,6 +85,7 @@ public class GamePlayManager : MonoBehaviour {
     public bool autoCell = false;
 
     // These are the text objects
+    public Gradient stressGradient;
     [SerializeField] Text textDate;
     [SerializeField] Text textTime;
     [SerializeField] Text textSavings;
@@ -132,6 +133,9 @@ public class GamePlayManager : MonoBehaviour {
             }
         }
         luckDecidedAlready = true;
+    }
+    private void stressGradientChange() {
+
     }
     // Will combine monitor emotion and StressBarChange
     private void stressBarChange() {
