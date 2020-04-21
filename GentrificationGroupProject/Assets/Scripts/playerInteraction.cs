@@ -11,26 +11,6 @@ public class playerInteraction : MonoBehaviour {
     private void Update() {
         GetObject();
     }
-    private void checkRentDueDate() {
-        if (gameManagerScript.rentPaid == false && gameManagerScript.currentDay >= 1 && gameManagerScript.currentDay <= 5) {
-            gameManagerScript.payBills();
-        }
-    }
-    private void checkGasDueDate() {
-        if (gameManagerScript.gasPaid == false && gameManagerScript.currentDay >= 5 && gameManagerScript.currentDay <= 12) {
-            gameManagerScript.payBills();
-        }
-    }
-    private void checkElectricityDueDate() {
-        if (gameManagerScript.electricityPaid == false && gameManagerScript.currentDay >= 10 && gameManagerScript.currentDay <= 17) {
-            gameManagerScript.payBills();
-        }
-    }
-    private void checkCellDueDate() {
-        if (gameManagerScript.cellPaid == false && gameManagerScript.currentDay >= 16 && gameManagerScript.currentDay <= 23) {
-            gameManagerScript.payBills();
-        }
-    }
     private void GetObject() {
 
         RaycastHit hit;
@@ -41,37 +21,48 @@ public class playerInteraction : MonoBehaviour {
                 if (hit.transform != null) {
                     if (hit.collider.gameObject.tag == "ComputerForNow") {
                         DisplayObject(hit.transform.gameObject);
-                        checkRentDueDate();
-                        checkGasDueDate();
-                        checkElectricityDueDate();
-                        checkCellDueDate();
+                        gameManagerScript.payBills();
                     }
-                    if (hit.collider.gameObject.tag == "StoveForNow") {
+                    if (hit.collider.gameObject.tag == "Telephone") {
                         DisplayObject(hit.transform.gameObject);
-                        if (gameManagerScript.currentHour < 10) {
-                            gameManagerScript.currentHour += 1;
-                            print("You ate");
+                        if (gameManagerScript.eaten == false && gameManagerScript.currentHour > 9) {
+                            print("It's too late to eat. I won't get enough rest for work tomorrow.");
+                        }
+                        if (gameManagerScript.eaten == true) {
+                            print("I am too full to eat");
+                        }
+                        if (gameManagerScript.eaten == false && gameManagerScript.currentHour < 10){
                             gameManagerScript.eaten = true;
-
-                            if (gameManagerScript.daysHungry > 0) {
-                                gameManagerScript.daysHungry--;
-                            }
-                            else {
-                                gameManagerScript.daysHungry = 0;
-                            }
+                            gameManagerScript.savings -= 10;
+                            print("You ordered food!");
+                            gameManagerScript.currentHour += 1;
                         }
-                        else {
-                            print("too late to eat");
-                        }
-                        print(gameManagerScript.health);
                     }
-                    else {
-                        gameManagerScript.eaten = false;
+                        if (hit.collider.gameObject.tag == "StoveForNow") {
+                        DisplayObject(hit.transform.gameObject);
+                        // checks to make sure you havent eaten, and that it's not too late to eat.
+                        if (gameManagerScript.eaten == false && gameManagerScript.currentHour > 9) {
+                            print("It's too late to eat. I won't get enough rest for work tomorrow.");
+                        }
+                        if (gameManagerScript.eaten == true) {
+                            print("I am too full to eat");
+                        }
+                        if (gameManagerScript.eaten == false && gameManagerScript.currentHour < 10 && gameManagerScript.mealsInFridge > 0) {
+                            gameManagerScript.currentHour += 1;
+                            gameManagerScript.daysHungry = 0;
+                            gameManagerScript.eaten = true;
+                            print("You ate: should also print show an emote above him that shows he's eating");
+                        }
                     }
                     if (hit.collider.gameObject.tag == "Door") {
-                        //gameManagerScript.savings
-                        gameManagerScript.currentHour = gameManagerScript.currentHour + 8;
-                        print(gameManagerScript.currentHour);
+                        // I think that the door should be used to go buy things groceries, or personal effects or go to do an "activity" outside
+                        // your activity outside will adjust time though
+                        // print(gameManagerScript.currentHour);
+                    }
+                    if (hit.collider.gameObject.tag == "Bed") {
+                        gameManagerScript.currentHour = (11 - gameManagerScript.currentHour) + gameManagerScript.currentHour;
+                        gameManagerScript.timeStart = 0f;
+                        // print(gameManagerScript.currentHour);
                     }
 
                 }

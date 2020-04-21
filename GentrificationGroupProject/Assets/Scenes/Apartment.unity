@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 38749769}
   - component: {fileID: 38749768}
   m_Layer: 5
-  m_Name: Emotion
+  m_Name: Stress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -266,7 +266,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Emotion:'
+  m_Text: 'Stress:'
 --- !u!222 &38749769
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 108681149}
   m_Layer: 0
   m_Name: PhoneRing
-  m_TagString: Untagged
+  m_TagString: Telephone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4d81479b922048042ae97343dfcf2545, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4d81479b922048042ae97343dfcf2545, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -561,8 +561,8 @@ GameObject:
   - component: {fileID: 312939367}
   - component: {fileID: 312939368}
   m_Layer: 5
-  m_Name: LandLord
-  m_TagString: Untagged
+  m_Name: Phone
+  m_TagString: Telephone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -601,7 +601,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 312939366}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 131.69, y: 34.23, z: -0.7}
   m_LocalScale: {x: 2, y: 6, z: 2}
   m_Children: []
@@ -809,7 +809,7 @@ Transform:
   m_LocalScale: {x: 2, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 1730560087}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &472236280
 GameObject:
@@ -1036,7 +1036,7 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'This is
@@ -1098,12 +1098,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMonth: 4
-  currentDay: 29
+  currentDay: 30
   currentHour: 6
-  savings: 1500
-  eaten: 0
+  timeStart: 0
+  emotion: 
   daysHungry: 0
-  health: 
+  eaten: 0
+  mealsInFridge: 0
+  savings: 1500
   rentPaid: 0
   gasPaid: 0
   electricityPaid: 0
@@ -1117,8 +1119,9 @@ MonoBehaviour:
   textDate: {fileID: 26400888}
   textTime: {fileID: 1203282922}
   textSavings: {fileID: 795440939}
-  textStatus: {fileID: 1755804954}
+  textEmotion: {fileID: 1755804954}
   textBills: {fileID: 504211519}
+  textHunger: {fileID: 1063476188}
   StressBarBox: {fileID: 1848558707}
 --- !u!1 &705507993
 GameObject:
@@ -1519,7 +1522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 34ae7a473b9b90a4db80bedce251f4e6, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 34ae7a473b9b90a4db80bedce251f4e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1570,7 +1573,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1063476187
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1754,7 +1757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91f1cc7ab3b1c5f4e823e0084f20bd3f, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 91f1cc7ab3b1c5f4e823e0084f20bd3f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1853,7 +1856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0c716622cbbf72d41b0b36c729bf761a, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0c716622cbbf72d41b0b36c729bf761a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2437,7 +2440,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1730560087}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1682973830
 PrefabInstance:
@@ -2516,7 +2519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0c716622cbbf72d41b0b36c729bf761a, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0c716622cbbf72d41b0b36c729bf761a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2559,6 +2562,7 @@ Transform:
   m_LocalPosition: {x: 129.99219, y: 38.65574, z: -69.33177}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 2071324064}
   - {fileID: 1679829676}
   - {fileID: 456496145}
   - {fileID: 980958815}
@@ -2581,7 +2585,7 @@ GameObject:
   - component: {fileID: 1755804955}
   - component: {fileID: 1755804954}
   m_Layer: 5
-  m_Name: Health
+  m_Name: Emotion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2637,7 +2641,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Health:'
+  m_Text: 'Emotion:'
 --- !u!222 &1755804955
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2715,7 +2719,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848558707}
   m_LocalRotation: {x: 0, y: -0.043619405, z: 0, w: 0.9990483}
-  m_LocalPosition: {x: 0, y: 0, z: 727.7215}
+  m_LocalPosition: {x: 0, y: 0, z: 750}
   m_LocalScale: {x: 100, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 359885556}
@@ -2795,3 +2799,96 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 11, z: 13}
   m_Center: {x: 0, y: 6, z: 0}
+--- !u!1 &2071324063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071324064}
+  - component: {fileID: 2071324067}
+  - component: {fileID: 2071324066}
+  - component: {fileID: 2071324065}
+  m_Layer: 0
+  m_Name: BedForNow
+  m_TagString: Bed
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2071324064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071324063}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.78, y: -6.78, z: 51.93}
+  m_LocalScale: {x: 3, y: 0.53, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1730560087}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2071324065
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071324063}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &2071324066
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071324063}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &2071324067
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071324063}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}

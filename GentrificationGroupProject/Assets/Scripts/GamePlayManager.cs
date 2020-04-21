@@ -4,56 +4,71 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class GamePlayManager : MonoBehaviour {
-
-    // These will be for monitoring the day of the week
-    // Will test this later...
-    private string[] daysWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-    private int currentDayOfTheWeek = 0;
-    private int maxDayOfTheWeek = 6;
-
     // These are the part of the game that will show a life event
     // total life events so far: 5 : so 0 - 4
     System.Random randomEvent = new System.Random();
+
+    // Currently Not Implemented:
     private string[] lifeEvent = { "Got into an accident at work, I have to pay medical bills",
         "The toilet got clogged... called a plumber. Have to pay this repair bill",
         "Rodents in the house, had to call an exterminator", "Family called asking for money", "Friend called asking me for money"};
     private int[] lifeEventCost = { 200, 50, 50, 100, 75 };
     private bool luckDecidedAlready = true;
 
+    // These will be for monitoring the date, time, day of the week, month and year. 
+    // These will be for monitoring the day of the week
+    private string[] monthsOfTheYear = {"Dont Want to Use 0","January","February","March",
+        "April","May","June","July","August","September","October","December"
+    };
+    private string[] daysWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    private int currentDayOfTheWeek = 4;
+    private int maxDayOfTheWeek = 6;
+
     // these are the time and date parts of the game
+    bool gameFirstDay = true;
     public int currentMonth = 04;
-    public int currentDay = 29;
+    private int previousMonth;
+    private int nextMonth;
+    public int currentDay = 30;
     // only need thsese public for access to other scripts
     private int currentYear = 20;
     public int currentHour = 6;
-    private float timeStart = 0f;
+    public float timeStart = 0f;
     private int lastDayOfTheMonth;
     private int lastHourOfTheDay = 11;
 
-    // these are the money parts of the game
-    public int savings = 1500;
-    private bool paid = true;
-
-    // this will be the part of the game that monitors your health
-    private string[] status = { "Normal", "Hungry", "Sick", "Sick & Hungry", "Stressed" };
-    public bool eaten = false;
+    // this will be the part of the game that monitors your emotions and your hunger
+    public string emotion;
+    private string[] emotionalStatus = { "Normal", "Feeing Hungry", "Feeling Sick", "Sick & Hungry", "Stressed" };
     public int daysHungry = 0;
-    public string health;
+    public bool eaten = false;
+    private string[] hungerLevel = { "Hungry: Full", "Hungry: Yes", "Hungry: Very Hungry" };
+    public int mealsInFridge = 2;
 
     // This will be used to manage the stress bars color.
     SpriteRenderer stressBar;
 
+    // This will be part of the game that monitors savings, bills and late fee penalties.
+    public int savings = 1500;
+    private bool paid = true;
+
+    private int monthsBehind = 0; // If months behind rent is equal to 2 you are evicted / lose the game.
 
     // This will be the part of the game that monitors the upcoming bills.
     private string billsDisplayed = "";
+    private string dueBy = " due by: ";
+    private int lastDayPayRent = 5;
+    private int lastDayPayGas = 12;
+    private int lastDayPayElectric = 15;
+    private int lastDayPayCell = 23;
     private int totalBillsDues = 0;
     private string[] bills = { "Rent $1300", "Gas Bill $50", "Electricity Bill $75", "Phone Bill $75" };
     private List<string> dueBills = new List<string>();
     private int[] livingCost = { 1300, 50, 75, 75 };
+    private int lateFee = 100; // For Rent, For gas / 10. For electricty & Phone / 5.
     // cost of living for these bills is 1500.
     // Daily food purchase will be 10 dollars so average 10*30 = 300. Total is 1800
     // Monthly MetroCard will be 130, so 2130! You went over budget by 130 if you choose to not make food
-
 
     // booleans for upcoming bills need public to access in other scripts.
     public bool rentPaid = false;
@@ -69,20 +84,20 @@ public class GamePlayManager : MonoBehaviour {
     public bool autoElectric = false;
     public bool autoCell = false;
 
-
     // These are the text objects
-    public Text textDate;
-    public Text textTime;
-    public Text textSavings;
-    public Text textStatus;
-    public Text textBills;
-    public GameObject StressBarBox;
+    [SerializeField] Text textDate;
+    [SerializeField] Text textTime;
+    [SerializeField] Text textSavings;
+    [SerializeField] Text textEmotion;
+    [SerializeField] Text textBills;
+    [SerializeField] Text textHunger;
+    [SerializeField] GameObject StressBarBox;
 
     // Start is called before the first frame update
     void Start() {
-        health = status[0];
+        emotion = emotionalStatus[0];
         stressBar = StressBarBox.GetComponent<SpriteRenderer>();
-        textBills.text = "None";
+        updateBill = true;
     }
 
     // Update is called once per frame
@@ -90,26 +105,100 @@ public class GamePlayManager : MonoBehaviour {
         textSavings.text = "Savings: $ " + savings.ToString();
         monitorTime();
         monitorDate();
+        monitorHunger();
         stressBarChange();
         monitorPayDay();
-        monitorHealth();
-        billsPaid();
+        monitorEmotion();
         addToBills();
         if (updateBill) {
             displayBills();
             updateBill = false;
         }
     }
+    /// <summary>
+    /// The Following Code has not been implemented or requires adjustment
+    /// </summary>
+    private void gameOver() {
+        if (monthsBehind == 2) {
+            // end the game, because you were evicted.
+        }
+    }
+    private void lifeSucks() {
+        if (currentDay % 14 == 0 && luckDecidedAlready == false) {
+            int luck = randomEvent.Next(1, 100000);
+            int lifeEventHappened = randomEvent.Next(1, 6);
+            if (luck < 5 && luck > 1) {
+                Debug.Log(lifeEvent[lifeEventHappened]);
+            }
+        }
+        luckDecidedAlready = true;
+    }
+    // Will combine monitor emotion and StressBarChange
+    private void stressBarChange() {
+        if (emotion == "Normal") {
+            stressBar.color = Color.white;
+        }
+        if (emotion == "Hungry") {
+            stressBar.color = Color.yellow;
+        }
+        if (emotion == "Sick") {
+            stressBar.color = Color.green;
+        }
+        if (emotion == emotionalStatus[4] && savings < totalBillsDues) {
+            stressBar.color = Color.red;
+        }
+    }
+    public void monitorEmotion() {
+        //{ "Normal", "Hungry", "Sick", "Sick & Hungry" };
+        textEmotion.text = "Emotion: " + emotion;
+        if (daysHungry == 0) {
+            emotion = emotionalStatus[0];
+        }
+        if (daysHungry > 0) {
+            // this puts you at hungry
+            emotion = emotionalStatus[1];
+        }
+        if (daysHungry > 4 & emotion == emotionalStatus[1]) {
+            // this puts you at sick
+            emotion = emotionalStatus[2];
+        }
+        if (daysHungry > 6 & emotion == emotionalStatus[2]) {
+            // this puts you at hungry and sick
+            emotion = emotionalStatus[3];
+        }
+        if (savings < totalBillsDues) {
+            emotion = emotionalStatus[4];
+        }
+        if (eaten == true) {
+            if (emotion == emotionalStatus[1]) {
+                emotion = emotionalStatus[0];
+            }
+            if (emotion == emotionalStatus[2]) {
+                emotion = emotionalStatus[1];
+            }
+        }
+    }
+    /// <summary>
+    /// The following code is now free bugs, document any changes.
+    /// </summary>\
+    /// 
+
+
+    // monitorTime is bug free now
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
-        // remove this:
-        float speedUp = 30;
-        //
+        float speedUp = 30; // speedUp Time, will adjust for final game
         timeStart += Time.deltaTime * speedUp;
-
-        if (currentHour >= lastHourOfTheDay) {
+        if (currentHour > lastHourOfTheDay - 1) {
+            gameFirstDay = false;
             if (eaten != true) {
                 daysHungry++;
+            }
+            if (currentDayOfTheWeek >= 6) {
+                currentDayOfTheWeek = 0;
+            }
+            else {
+                currentDayOfTheWeek++;
             }
             currentHour = 6;
             currentDay++;
@@ -122,78 +211,89 @@ public class GamePlayManager : MonoBehaviour {
             currentHour++;
         }
     }
-    public void monitorHealth() {
-        //{ "Normal", "Hungry", "Sick", "Sick & Hungry" };
-        textStatus.text = "Status: " + health.ToString();
-        if (daysHungry == 0) {
-            health = status[0];
+    //monitorHunger is bugFree
+    private void monitorHunger() {
+        if (daysHungry > 4) {
+            textHunger.text = hungerLevel[2];
         }
-        if (daysHungry > 0) {
-            // this puts you at hungry
-            health = status[1];
+        else if (daysHungry > 0) {
+            textHunger.text = hungerLevel[1];
         }
-        if (daysHungry > 4 & health == status[1]) {
-            // this puts you at sick
-            health = status[2];
-        }
-        if (daysHungry > 6 & health == status[2]) {
-            // this puts you at hungry and sick
-            health = status[3];
-        }
-        if (savings < totalBillsDues) {
-            health = status[4];
-        }
-        if (eaten == true) {
-            if (health == status[1]) {
-                health = status[0];
-            }
-            if (health == status[2]) {
-                health = status[1];
-            }
+        else {
+            textHunger.text = hungerLevel[0];
         }
     }
     private void monitorDate() {
-        textDate.text = "Date: " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
+        textDate.text = "Date: " + daysWeek[currentDayOfTheWeek] + " " + currentMonth + " / " + currentDay + " / " + currentYear.ToString();
+
         if (currentMonth == 01) {
             lastDayOfTheMonth = 31;
+            previousMonth = 12;
+            nextMonth = 2;
         }
         if (currentMonth == 02 && currentYear % 4 == 0) {
             lastDayOfTheMonth = 29;
+            previousMonth = 1;
+            nextMonth = 3;
         }
         else {
-            lastDayOfTheMonth = 28;
+            if (currentMonth == 02) {
+                lastDayOfTheMonth = 28;
+                previousMonth = 1;
+                nextMonth = 3;
+            }
         }
         if (currentMonth == 03) {
             lastDayOfTheMonth = 31;
+            previousMonth = 2;
+            nextMonth = 4;
         }
         if (currentMonth == 04) {
             lastDayOfTheMonth = 30;
+            previousMonth = 3;
+            nextMonth = 5;
         }
         if (currentMonth == 05) {
             lastDayOfTheMonth = 31;
+            previousMonth = 4;
+            nextMonth = 6;
         }
         if (currentMonth == 06) {
             lastDayOfTheMonth = 30;
+            previousMonth = 5;
+            nextMonth = 7;
         }
         if (currentMonth == 07) {
             lastDayOfTheMonth = 31;
+            previousMonth = 6;
+            nextMonth = 8;
         }
         if (currentMonth == 08) {
             lastDayOfTheMonth = 31;
+            previousMonth = 7;
+            nextMonth = 9;
         }
         if (currentMonth == 09) {
             lastDayOfTheMonth = 30;
+            previousMonth = 8;
+            nextMonth = 10;
         }
         if (currentMonth == 10) {
             lastDayOfTheMonth = 31;
+            previousMonth = 9;
+            nextMonth = 11;
         }
         if (currentMonth == 11) {
             lastDayOfTheMonth = 30;
+            previousMonth = 10;
+            nextMonth = 12;
         }
         if (currentMonth == 12) {
             lastDayOfTheMonth = 31;
+            previousMonth = 11;
+            nextMonth = 1;
         }
-        // Very Special Condition for next Year
+        // Very Special Condition for end of the year
         if (currentDay > lastDayOfTheMonth && currentMonth == 12) {
             currentMonth = 1;
             currentDay = 1;
@@ -204,174 +304,144 @@ public class GamePlayManager : MonoBehaviour {
             currentDay = 1;
         }
     }
+    // monitorPayDay is now bug free
     private void monitorPayDay() {
         // ensures you get a single payment
-        if (currentDay == 6 || currentDay == 13 || currentDay == 20 || currentDay == 27) {
+        // luckDecidedAlready = false;
+        // You get paid every Sunday
+        if (currentDayOfTheWeek == 6) {
             paid = false;
-            luckDecidedAlready = false;
         }
-        // on the 7th it should be payday all day. but you will actually be paid tomorrow
-        if (currentDay % 7 == 0 && paid == false) {
+        if (currentDayOfTheWeek == 0 && paid == false) {
             savings += 450;
             paid = true;
         }
     }
-
+    // addToBills is now bugFree
     private void addToBills() {
-        if (currentMonth == 2 && currentDay == 25 && displayedBills == false) {
+        if (currentMonth != 2 && currentDay > 26 && displayedBills == false) {
             updateBill = true;
-            dueBills.Add(bills[0].ToString()); // adds rent to upComingBills from bills[0].
-            totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
-
-        }
-        else if (currentMonth != 2 && currentDay >= 26 && displayedBills == false) {
-            updateBill = true;
-            dueBills.Add(bills[0]); // adds rent to upComingBills from bills[0].
+            dueBills.Add(bills[0] + dueBy + nextMonth + "/" + lastDayPayRent.ToString()); // adds rent to upComingBills from bills[0].
             totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
         }
         else {
-
+            if (currentMonth == 2 && currentDay > 23 && displayedBills == false) {
+                updateBill = true;
+                dueBills.Add(bills[0] + dueBy + nextMonth + "/" + lastDayPayRent.ToString()); // adds rent to upComingBills from bills[0].
+                totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
+            }
         }
         if (currentDay == 4 && displayedBills == true) {
             displayedBills = false;
         }
-        if (currentDay == 5 && displayedBills == false) {
+        if (currentDay == 5 && displayedBills == false && gasPaid == false) {
             updateBill = true;
-            dueBills.Add(bills[1]); // adds Gas Bill to upComingBills from bills[1].
+            dueBills.Add(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString()); // adds Gas Bill to upComingBills from bills[1].
             totalBillsDues += livingCost[1]; // adds Gas Bill to the totalBillsDue.
         }
         if (currentDay == 9 && displayedBills == true) {
             displayedBills = false;
         }
-        if (currentDay == 10 && displayedBills == false) {
+        if (currentDay == 10 && displayedBills == false && electricityPaid == false) {
             updateBill = true;
-            dueBills[2] = bills[2]; // adds Electricity Bill to upComingBills from bills[2].
+            dueBills.Add(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString()); // adds Electricity Bill to upComingBills from bills[2].
             totalBillsDues += livingCost[2]; // adds Electricity Bill to the totalBillsDue.
         }
         if (currentDay == 15 && displayedBills == true) {
             displayedBills = false;
         }
-        if (currentDay == 16 && displayedBills == false) {
+        if (currentDay == 16 && displayedBills == false && cellPaid == false) {
             updateBill = true;
-            dueBills[3] = bills[3]; // adds Phone Bill to upComingBills from bills[3].
+            dueBills.Add(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString()); // adds Phone Bill to upComingBills from bills[3].
             totalBillsDues += livingCost[3]; // adds Phone Bill to the totalBillsDue.
         }
     }
-    public void billsPaid() {
-        if (currentDay == lastDayOfTheMonth) {
-            rentPaid = false;
-            gasPaid = false;
-            electricityPaid = false;
-            cellPaid = false;
-        }
-        // Forcefully Takes money from your savings account.
-
-        // Last day to Pay your Rent.
-        if (currentDay == 5 && rentPaid == false && autoRent == true) {
-            savings -= livingCost[1];
-            rentPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[0], "");
-            dueBills.Remove(bills[0]);
-            totalBillsDues -= livingCost[0];
-            updateBill = true;
-        }
-        // Last Day to Pay Your Gas Bill, unless we add the ability to manually pay
-        // If so will have to code so that if you don't pay this bill by this date.
-        // The price will go up by $penalty fee everyday ?
-        if (currentDay == 12 && gasPaid == false && autoGas == true) {
-            savings -= livingCost[1];
-            gasPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[1], "");
-            totalBillsDues -= livingCost[1];
-            updateBill = true;
-        }
-        // Last Day to Pay Your Electricity Bill, unless we add the ability to manually pay
-        // If so will have to code so that if you don't pay this bill by this date.
-        // The price will go up by $penalty fee everyday ?
-        if (currentDay == 17 && electricityPaid == false && autoElectric == true) {
-            savings -= livingCost[2];
-            electricityPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[2], "");
-            totalBillsDues -= livingCost[2];
-            updateBill = true;
-        }
-        // Last Day to Pay Your Cell Bill, unless we add the ability to manually pay
-        // If so will have to code so that if you don't pay this bill by this date.
-        // The price will go up by $penalty fee everyday ?
-        if (currentDay == 23 && cellPaid == false && autoCell == true) {
-            savings -= livingCost[3];
-            cellPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[3], "");
-            totalBillsDues -= livingCost[3];
-            updateBill = true;
-        }
-    }
+    //displayBills is now bugFree
     private void displayBills() {
+        billsDisplayed = "";
         foreach (string msg in dueBills) {
+
             billsDisplayed = billsDisplayed + msg.ToString() + "\n";
         }
         textBills.text = billsDisplayed + "\n" + "Total Due: " + totalBillsDues.ToString();
         displayedBills = true;
     }
-    private void lifeSucks() {
-        if (currentDay % 14 == 0 && luckDecidedAlready == false) {
-            int luck = randomEvent.Next(1, 100000);
-            int lifeEventHappened = randomEvent.Next(1, 6);
-            if (luck < 5 && luck > 1) {
-                Debug.Log(lifeEvent[lifeEventHappened]);
-            }
-        }
-        luckDecidedAlready = true;
-    }
-    private void stressBarChange() {
-        if (health == "Normal") {
-            stressBar.color = Color.white;
-        }
-        if (health == "Hungry") {
-            stressBar.color = Color.yellow;
-        }
-        if (health == "Sick") {
-            stressBar.color = Color.green;
-        }
-        if (health == status[4] && savings < totalBillsDues) {
-            stressBar.color = Color.red;
-        }
-    }
-
+    // This method is used to pay the bills.
+    // payBills is now bugFree
     public void payBills() {
-        if (rentPaid == false && currentDay >= 1 && currentDay <= 5) {
+        // prepares the bills to be paid for the following month
+        if (currentDay == lastDayOfTheMonth) {
+            electricityPaid = false;
+            cellPaid = false;
+            rentPaid = false;
+            gasPaid = false;
+        }
+        if (rentPaid == false && currentDay > 5 && gameFirstDay == false) {
+            savings -= livingCost[0] + lateFee;
+            rentPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[0] + dueBy + currentMonth + "/" + lastDayPayRent, "");
+            dueBills.Remove(bills[0] + dueBy + currentMonth + "/" + lastDayPayRent.ToString());
+            totalBillsDues -= livingCost[0];
+            updateBill = true;
+        }
+        if (rentPaid == false && currentDay > 0 && currentDay < 6) {
             savings -= livingCost[0];
             rentPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[0], "");
-            dueBills.Remove(bills[0]);
+            billsDisplayed = billsDisplayed.Replace(bills[0] + dueBy + currentMonth + "/" + lastDayPayRent, "");
+            dueBills.Remove(bills[0] + dueBy + currentMonth + "/" + lastDayPayRent.ToString());
             totalBillsDues -= livingCost[0];
             updateBill = true;
         }
         if (gasPaid == false && currentDay >= 5 && currentDay <= 12) {
             savings -= livingCost[1];
             gasPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[1], "");
+            billsDisplayed = billsDisplayed.Replace(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString(), "");
+            dueBills.Remove(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString());
+            totalBillsDues -= livingCost[1];
+            updateBill = true;
+        }
+        if (gasPaid == false && currentDay > 12 && gameFirstDay == false) {
+            savings -= livingCost[1] + lateFee;
+            gasPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString(), "");
+            dueBills.Remove(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString());
             totalBillsDues -= livingCost[1];
             updateBill = true;
         }
         if (electricityPaid == false && currentDay >= 10 && currentDay <= 17) {
             savings -= livingCost[2];
             electricityPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[2], "");
+            billsDisplayed = billsDisplayed.Replace(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString(), "");
+            dueBills.Remove(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString());
+            totalBillsDues -= livingCost[2];
+            updateBill = true;
+        }
+        if (electricityPaid == false && currentDay > 17 && gameFirstDay == false) {
+            savings -= livingCost[2] + lateFee;
+            electricityPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString(), "");
+            dueBills.Remove(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString());
             totalBillsDues -= livingCost[2];
             updateBill = true;
         }
         if (cellPaid == false && currentDay >= 16 && currentDay <= 23) {
             savings -= livingCost[3];
             cellPaid = true;
-            billsDisplayed = billsDisplayed.Replace(bills[3], "");
+            billsDisplayed = billsDisplayed.Replace(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString(), "");
+            dueBills.Remove(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString());
             totalBillsDues -= livingCost[3];
             updateBill = true;
         }
+        if (cellPaid == false && currentDay > 23 && gameFirstDay == false) {
+            savings -= livingCost[3] + lateFee;
+            cellPaid = true;
+            billsDisplayed = billsDisplayed.Replace(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString(), "");
+            dueBills.Remove(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString());
+            totalBillsDues -= livingCost[3];
+            updateBill = true;
+        }
+        else {
+            print("No Bills to Pay, Good Job!");
+        }
     }
-
-    public void noAdvanceBill() {
-        // add a check to ensure you dont get bills early
-    }
-
 } // end of class

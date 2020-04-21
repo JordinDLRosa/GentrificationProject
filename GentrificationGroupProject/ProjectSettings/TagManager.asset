@@ -8,6 +8,7 @@ TagManager:
   - StoveForNow
   - Telephone
   - Door
+  - Bed
   layers:
   - Default
   - TransparentFX

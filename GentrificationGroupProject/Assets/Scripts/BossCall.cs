@@ -22,7 +22,7 @@ public class BossCall : MonoBehaviour {
     }
     void OnTriggerExit(Collider other) {
         if (other.tag == "Player") {
-            gamePlayManager.billsPaid();
+            //gamePlayManager.billsPaid();
         }
     }
 
