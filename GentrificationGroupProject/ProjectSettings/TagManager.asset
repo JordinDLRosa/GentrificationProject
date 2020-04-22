@@ -11,6 +11,7 @@ TagManager:
   - Bed
   - Calendar
   - Clock
+  - Notebook
   layers:
   - Default
   - TransparentFX

@@ -84,6 +84,11 @@ public class playerInteraction : MonoBehaviour {
                         print("THIS TIME");
                         StartCoroutine(WaitForSec());
                     }
+                    /*if (hit.collider.gameObject.tag == "Notebook")
+                    {
+                        DisplayObject(hit.transform.gameObject);
+                        gameManagerScript.textBills.enabled = true;
+                    }*/
                     IEnumerator WaitForSec() {
                         yield return new WaitForSeconds(5);
                         gameManagerScript.textDate.enabled = false;
