@@ -1338,6 +1338,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ComputerForNow
       objectReference: {fileID: 0}
+    - target: {fileID: 117720, guid: 35e7ce7e1bb8eeb4f8e896fdfa8176db, type: 3}
+      propertyPath: m_TagString
+      value: ComputerForNow
+      objectReference: {fileID: 0}
     - target: {fileID: 493332, guid: 35e7ce7e1bb8eeb4f8e896fdfa8176db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 19.72
