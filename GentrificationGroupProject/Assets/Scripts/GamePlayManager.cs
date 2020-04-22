@@ -44,6 +44,8 @@ public class GamePlayManager : MonoBehaviour {
     public bool eaten = false;
     private string[] hungerLevel = { "Hungry: Full", "Hungry: Yes", "Hungry: Very Hungry" };
     public int mealsInFridge = 2;
+    private int stressState = 0;
+    private int relaxedState = 5;
 
     // This will be used to manage the stress bars color.
     SpriteRenderer stressBar;
@@ -84,8 +86,11 @@ public class GamePlayManager : MonoBehaviour {
     public bool autoElectric = false;
     public bool autoCell = false;
 
+    float targetAmount;
+    public Image stressedBarImg;
+
     // These are the text objects
-    public Gradient stressGradient;
+    public Gradient stressedBar;
     [SerializeField] public Text textDate;
     [SerializeField] public Text textTime;
     [SerializeField] Text textSavings;
@@ -100,6 +105,8 @@ public class GamePlayManager : MonoBehaviour {
         emotion = emotionalStatus[0];
         stressBar = StressBarBox.GetComponent<SpriteRenderer>();
         updateBill = true;
+
+        targetAmount = stressedBarImg.fillAmount;
     }
 
     // Update is called once per frame
@@ -140,18 +147,25 @@ public class GamePlayManager : MonoBehaviour {
     }
     // Will combine monitor emotion and StressBarChange
     private void stressBarChange() {
-        if (emotion == "Normal") {
-            stressBar.color = Color.white;
+        // This controls the color of the bar. We take our custom Color Gradient and use the fillAmount property to tell use where in the...
+        //...color gradient to take the color from (fillAmount is a value between 0-1). 
+        if (rentPaid == false && gasPaid == false && electricityPaid == false && cellPaid == false) {
+            stressState = 5;
+            SetNewFillAmount(stressState, relaxedState);
         }
-        if (emotion == "Hungry") {
-            stressBar.color = Color.yellow;
+        if (rentPaid == false && currentDay < 4) {
+            stressState = 2;
+            SetNewFillAmount(stressState, relaxedState);
         }
         if (emotion == "Sick") {
             stressBar.color = Color.green;
         }
-        if (emotion == emotionalStatus[4] && savings < totalBillsDues) {
+        if (emotion == emotionalStatus[4] && savings - 300 < totalBillsDues) {
             stressBar.color = Color.red;
         }
+        float s = 2;
+        stressedBarImg.fillAmount = Mathf.Lerp(stressedBarImg.fillAmount, targetAmount, s * Time.deltaTime);
+        stressedBarImg.color = stressedBar.Evaluate(stressedBarImg.fillAmount);
     }
     public void monitorEmotion() {
         //{ "Normal", "Hungry", "Sick", "Sick & Hungry" };
@@ -190,7 +204,7 @@ public class GamePlayManager : MonoBehaviour {
 
 
     // monitorTime is bug free now
-    public void monitorTime() {
+    private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         float speedUp = 30; // speedUp Time, will adjust for final game
         timeStart += Time.deltaTime * speedUp;
@@ -224,8 +238,11 @@ public class GamePlayManager : MonoBehaviour {
         else if (daysHungry > 0) {
             textHunger.text = hungerLevel[1];
         }
-        else {
+        else if(daysHungry == 0 && eaten == true){
             textHunger.text = hungerLevel[0];
+        }
+        else {
+            textHunger.text = hungerLevel[1];
         }
     }
     private void monitorDate() {
@@ -448,5 +465,8 @@ public class GamePlayManager : MonoBehaviour {
         else {
             print("No Bills to Pay, Good Job!");
         }
+    }
+    private void SetNewFillAmount(int fill, int maxFill) {
+        targetAmount = (float)fill / (float)maxFill;////
     }
 } // end of class
