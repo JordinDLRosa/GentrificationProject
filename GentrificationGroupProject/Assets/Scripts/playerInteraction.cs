@@ -5,8 +5,16 @@ using UnityEngine.UI;
 
 public class playerInteraction : MonoBehaviour {
     private GamePlayManager gameManagerScript;
+    public GameObject uiObjectDate;
+    public GameObject uiObjectTime;
     private void Awake() {
         gameManagerScript = GameObject.FindObjectOfType<GamePlayManager>();
+    }
+    private void start()
+    {
+      gameManagerScript.textDate.enabled = false;
+      gameManagerScript.textTime.enabled = false;
+      gameManagerScript.textBills.enabled = false;
     }
     private void Update() {
         GetObject();
@@ -17,11 +25,15 @@ public class playerInteraction : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Input.GetMouseButtonDown(0))
-            if (Physics.Raycast(ray, out hit, 100.0f)) {
-                if (hit.transform != null) {
+            if (Physics.Raycast(ray, out hit, 100.0f))
+            {
+                if (hit.transform != null)
+                {
                     if (hit.collider.gameObject.tag == "ComputerForNow") {
                         DisplayObject(hit.transform.gameObject);
                         gameManagerScript.payBills();
+                        gameManagerScript.textBills.enabled = true;
+                        StartCoroutine(WaitForSec());
                     }
                     if (hit.collider.gameObject.tag == "Telephone") {
                         DisplayObject(hit.transform.gameObject);
@@ -64,10 +76,27 @@ public class playerInteraction : MonoBehaviour {
                         gameManagerScript.timeStart = 0f;
                         // print(gameManagerScript.currentHour);
                     }
-
+                    if (hit.collider.gameObject.tag == "Calendar")
+                    {
+                      gameManagerScript.textDate.enabled = true;
+                      print("THIS DAY");
+                      StartCoroutine(WaitForSec());
+                    }
+                    if (hit.collider.gameObject.tag == "Clock" )
+                    {
+                      gameManagerScript.textTime.enabled = true;
+                      print("THIS TIME");
+                      StartCoroutine(WaitForSec());
+                    }
+                    IEnumerator WaitForSec()
+                    {
+                      yield return new WaitForSeconds(5);
+                      gameManagerScript.textDate.enabled = false;
+                      gameManagerScript.textTime.enabled = false;
+                      gameManagerScript.textBills.enabled = false;
+                    }
                 }
             }
-
     }
 
     private void DisplayObject(GameObject go) {

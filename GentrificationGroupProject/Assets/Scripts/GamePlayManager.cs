@@ -15,7 +15,7 @@ public class GamePlayManager : MonoBehaviour {
     private int[] lifeEventCost = { 200, 50, 50, 100, 75 };
     private bool luckDecidedAlready = true;
 
-    // These will be for monitoring the date, time, day of the week, month and year. 
+    // These will be for monitoring the date, time, day of the week, month and year.
     // These will be for monitoring the day of the week
     private string[] monthsOfTheYear = {"Dont Want to Use 0","January","February","March",
         "April","May","June","July","August","September","October","December"
@@ -63,7 +63,7 @@ public class GamePlayManager : MonoBehaviour {
     private int lastDayPayCell = 23;
     private int totalBillsDues = 0;
     private string[] bills = { "Rent $1300", "Gas Bill $50", "Electricity Bill $75", "Phone Bill $75" };
-    private List<string> dueBills = new List<string>();
+    public List<string> dueBills = new List<string>();
     private int[] livingCost = { 1300, 50, 75, 75 };
     private int lateFee = 100; // For Rent, For gas / 10. For electricty & Phone / 5.
     // cost of living for these bills is 1500.
@@ -86,13 +86,14 @@ public class GamePlayManager : MonoBehaviour {
 
     // These are the text objects
     public Gradient stressGradient;
-    [SerializeField] Text textDate;
-    [SerializeField] Text textTime;
+    [SerializeField] public Text textDate;
+    [SerializeField] public Text textTime;
     [SerializeField] Text textSavings;
     [SerializeField] Text textEmotion;
-    [SerializeField] Text textBills;
+    [SerializeField] public Text textBills;
     [SerializeField] Text textHunger;
     [SerializeField] GameObject StressBarBox;
+    [SerializeField] public Text currentMealsInFridge;
 
     // Start is called before the first frame update
     void Start() {
@@ -185,11 +186,11 @@ public class GamePlayManager : MonoBehaviour {
     /// <summary>
     /// The following code is now free bugs, document any changes.
     /// </summary>\
-    /// 
+    ///
 
 
     // monitorTime is bug free now
-    private void monitorTime() {
+    public void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
         float speedUp = 30; // speedUp Time, will adjust for final game
         timeStart += Time.deltaTime * speedUp;

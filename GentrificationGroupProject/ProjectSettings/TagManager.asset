@@ -9,6 +9,8 @@ TagManager:
   - Telephone
   - Door
   - Bed
+  - Calendar
+  - Clock
   layers:
   - Default
   - TransparentFX
