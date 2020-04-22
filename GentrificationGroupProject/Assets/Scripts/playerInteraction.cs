@@ -29,7 +29,7 @@ public class playerInteraction : MonoBehaviour {
                     if (hit.collider.gameObject.tag == "ComputerForNow") {
                         DisplayObject(hit.transform.gameObject);
                         gameManagerScript.payBills();
-                        gameManagerScript.textBills.enabled = true;
+                        //gameManagerScript.textBills.enabled = true;
                         StartCoroutine(WaitForSec());
                     }
                     if (hit.collider.gameObject.tag == "Telephone") {
@@ -72,6 +72,7 @@ public class playerInteraction : MonoBehaviour {
                     if (hit.collider.gameObject.tag == "Bed") {
                         gameManagerScript.currentHour = (11 - gameManagerScript.currentHour) + gameManagerScript.currentHour;
                         gameManagerScript.timeStart = 0f;
+                        print("You went to sleep");
                         // print(gameManagerScript.currentHour);
                     }
                     if (hit.collider.gameObject.tag == "Calendar") {
@@ -84,11 +85,12 @@ public class playerInteraction : MonoBehaviour {
                         print("THIS TIME");
                         StartCoroutine(WaitForSec());
                     }
-                    /*if (hit.collider.gameObject.tag == "Notebook")
+                    if (hit.collider.gameObject.tag == "Notebook")
                     {
                         DisplayObject(hit.transform.gameObject);
                         gameManagerScript.textBills.enabled = true;
-                    }*/
+                        StartCoroutine(WaitForSec());
+                    }
                     IEnumerator WaitForSec() {
                         yield return new WaitForSeconds(5);
                         gameManagerScript.textDate.enabled = false;
