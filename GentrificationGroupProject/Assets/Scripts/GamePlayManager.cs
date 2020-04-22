@@ -238,7 +238,7 @@ public class GamePlayManager : MonoBehaviour {
         else if (daysHungry > 0) {
             textHunger.text = hungerLevel[1];
         }
-        else if(daysHungry == 0 && eaten == true){
+        else if (daysHungry == 0 && eaten == true) {
             textHunger.text = hungerLevel[0];
         }
         else {
@@ -469,4 +469,9 @@ public class GamePlayManager : MonoBehaviour {
     private void SetNewFillAmount(int fill, int maxFill) {
         targetAmount = (float)fill / (float)maxFill;////
     }
+    public string getBillsDisplay() {
+        string billsTransfer = billsDisplayed;
+        return billsTransfer;
+    }
+
 } // end of class

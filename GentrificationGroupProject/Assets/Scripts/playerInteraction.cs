@@ -7,6 +7,7 @@ public class playerInteraction : MonoBehaviour {
     private GamePlayManager gameManagerScript;
     public GameObject uiObjectDate;
     public GameObject uiObjectTime;
+    public Text paidBills;
     private void Awake() {
         gameManagerScript = GameObject.FindObjectOfType<GamePlayManager>();
     }
@@ -31,6 +32,13 @@ public class playerInteraction : MonoBehaviour {
                         gameManagerScript.payBills();
                         //gameManagerScript.textBills.enabled = true;
                         StartCoroutine(WaitForSec());
+                        if (gameManagerScript.getBillsDisplay() == "") {
+
+                            paidBills.text = "No Bills to pay";
+                        }
+                        else {
+                            paidBills.text = gameManagerScript.getBillsDisplay();
+                        }
                     }
                     if (hit.collider.gameObject.tag == "Telephone") {
                         DisplayObject(hit.transform.gameObject);
@@ -85,8 +93,7 @@ public class playerInteraction : MonoBehaviour {
                         print("THIS TIME");
                         StartCoroutine(WaitForSec());
                     }
-                    if (hit.collider.gameObject.tag == "Notebook")
-                    {
+                    if (hit.collider.gameObject.tag == "Notebook") {
                         DisplayObject(hit.transform.gameObject);
                         gameManagerScript.textBills.enabled = true;
                         StartCoroutine(WaitForSec());
