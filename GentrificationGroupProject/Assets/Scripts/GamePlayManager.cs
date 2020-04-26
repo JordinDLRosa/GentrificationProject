@@ -59,6 +59,7 @@ public class GamePlayManager : MonoBehaviour {
     public string[] alerts = { "Rent is coming up.", "Gas bill is coming up.", "Electricity bill is coming up.", "Cell bill is coming up." };
     public List<string> alertMe = new List<string>();
     public bool updateAlert = false;
+
     // This will be the part of the game that monitors the upcoming bills.
     private string billsDisplayed = "";
     private string dueBy = " due by: ";
@@ -514,6 +515,32 @@ public class GamePlayManager : MonoBehaviour {
         textSavings.text = "Savings: $ " + savings.ToString();
     }
     public void updateAlerts() {
-
+        if (rentPaid == false && currentDay > 27 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
+            textAlerts.text = getAlerts();
+            textAlerts.enabled = true;
+            WaitForSec();
+        }
+        if (gasPaid == false && currentDay > 5 && currentDay < 12 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
+            alertMe[1] = alerts[1];
+            textAlerts.text = getAlerts();
+            textAlerts.enabled = true;
+            WaitForSec();
+        }
+        if (electricityPaid == false && currentDay > 10 && currentDay < 17 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
+            alertMe[2] = alerts[2];
+            textAlerts.text = getAlerts();
+            textAlerts.enabled = true;
+            WaitForSec();
+        }
+        if (cellPaid == false && currentDay > 17 &&  currentDay < 23 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
+            alertMe[3] = alerts[3];
+            textAlerts.text = getAlerts();
+            textAlerts.enabled = true;
+            WaitForSec();
+        }
+        IEnumerator WaitForSec() {
+            yield return new WaitForSeconds(5);
+            textAlerts.enabled = false;
+        }
     }
 } // end of class

@@ -9,12 +9,10 @@ public class playerInteraction : MonoBehaviour {
     public GameObject uiObjectDate;
     public GameObject uiObjectTime;
     public Text paidBills;
-    public Text alerts;
     private void Awake() {
         gameManagerScript = GameObject.FindObjectOfType<GamePlayManager>();
     }
     private void start() {
-        alerts.enabled = false;
         gameManagerScript.textSavings.enabled = false;
         gameManagerScript.textDate.enabled = false;
         gameManagerScript.textTime.enabled = false;
@@ -22,7 +20,6 @@ public class playerInteraction : MonoBehaviour {
     }
     private void Update() {
         GetObject();
-        updateAlerts();
     }
     private void GetObject() {
 
@@ -127,7 +124,6 @@ public class playerInteraction : MonoBehaviour {
                     }
                     IEnumerator WaitForSec() {
                         yield return new WaitForSeconds(5);
-                        alerts.enabled = false;
                         gameManagerScript.textSavings.enabled = false;
                         gameManagerScript.textDate.enabled = false;
                         gameManagerScript.textTime.enabled = false;
