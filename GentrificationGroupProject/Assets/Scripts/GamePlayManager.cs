@@ -17,9 +17,6 @@ public class GamePlayManager : MonoBehaviour {
 
     // These will be for monitoring the date, time, day of the week, month and year.
     // These will be for monitoring the day of the week
-    private string[] monthsOfTheYear = {"Dont Want to Use 0","January","February","March",
-        "April","May","June","July","August","September","October","December"
-    };
     private string[] daysWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     private int currentDayOfTheWeek = 4;
     private int maxDayOfTheWeek = 6;
