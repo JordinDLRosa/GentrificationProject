@@ -1261,9 +1261,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'This is where
-
-    Alerts will display.'
+  m_Text: 
 --- !u!222 &392668592
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1658,6 +1656,13 @@ MonoBehaviour:
   eaten: 0
   mealsInFridge: 0
   savings: 1500
+  alerts:
+  - Rent is coming up.
+  - Gas bill is coming up.
+  - Electricity bill is coming up.
+  - Cell bill is coming up.
+  alertMe: []
+  updateAlert: 0
   dueBills: []
   rentPaid: 0
   gasPaid: 0
@@ -1702,6 +1707,7 @@ MonoBehaviour:
   textDate: {fileID: 26400888}
   textTime: {fileID: 1203282922}
   textSavings: {fileID: 795440939}
+  textAlerts: {fileID: 392668591}
   textEmotion: {fileID: 1755804954}
   textBills: {fileID: 504211519}
   textHunger: {fileID: 1063476188}
@@ -2040,7 +2046,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Savings:'
+  m_Text: 
 --- !u!222 &795440940
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2733,7 +2739,7 @@ GameObject:
   - component: {fileID: 1063476189}
   - component: {fileID: 1063476188}
   m_Layer: 5
-  m_Name: Hunger Tracking
+  m_Name: Hunger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
