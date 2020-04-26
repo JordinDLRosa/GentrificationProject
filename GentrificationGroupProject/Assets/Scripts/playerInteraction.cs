@@ -4,20 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class playerInteraction : MonoBehaviour {
+
     private GamePlayManager gameManagerScript;
     public GameObject uiObjectDate;
     public GameObject uiObjectTime;
     public Text paidBills;
+    public Text alerts;
     private void Awake() {
         gameManagerScript = GameObject.FindObjectOfType<GamePlayManager>();
     }
     private void start() {
+        alerts.enabled = false;
+        gameManagerScript.textSavings.enabled = false;
         gameManagerScript.textDate.enabled = false;
         gameManagerScript.textTime.enabled = false;
         gameManagerScript.textBills.enabled = false;
     }
     private void Update() {
         GetObject();
+        updateAlerts();
     }
     private void GetObject() {
 
@@ -29,6 +34,7 @@ public class playerInteraction : MonoBehaviour {
                 if (hit.transform != null) {
                     if (hit.collider.gameObject.tag == "Wallet") {
                         DisplayObject(hit.transform.gameObject);
+                        gameManagerScript.monitorSavings();
                         gameManagerScript.textSavings.enabled = true;
                         StartCoroutine(WaitForSec());
 
@@ -75,7 +81,22 @@ public class playerInteraction : MonoBehaviour {
                             gameManagerScript.currentHour += 1;
                             gameManagerScript.daysHungry = 0;
                             gameManagerScript.eaten = true;
-                            print("You ate: should also print show an emote above him that shows he's eating");
+                            Debug.Log(gameManagerScript.eaten);
+                            Debug.Log(gameManagerScript.mealsInFridge);
+                            print("You ate");
+                        }
+                    }
+                    if (hit.collider.gameObject.tag == "Fridge") {
+                        if (gameManagerScript.mealsInFridge >= 10) {
+                            Debug.Log(gameManagerScript.mealsInFridge);
+                            Debug.Log("Your Fridge Is Stocked!");
+
+                        }
+                        if (gameManagerScript.mealsInFridge < 10) {
+                            gameManagerScript.mealsInFridge++;
+                            gameManagerScript.savings -= 5;
+                            Debug.Log("Purchased Some Food");
+                            Debug.Log(gameManagerScript.mealsInFridge);
                         }
                     }
                     if (hit.collider.gameObject.tag == "Door") {
@@ -106,6 +127,7 @@ public class playerInteraction : MonoBehaviour {
                     }
                     IEnumerator WaitForSec() {
                         yield return new WaitForSeconds(5);
+                        alerts.enabled = false;
                         gameManagerScript.textSavings.enabled = false;
                         gameManagerScript.textDate.enabled = false;
                         gameManagerScript.textTime.enabled = false;
@@ -114,7 +136,6 @@ public class playerInteraction : MonoBehaviour {
                 }
             }
     }
-
     private void DisplayObject(GameObject go) {
         print(go.name);
     }
