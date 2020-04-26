@@ -12,6 +12,7 @@ TagManager:
   - Calendar
   - Clock
   - Notebook
+  - Remove?
   layers:
   - Default
   - TransparentFX
