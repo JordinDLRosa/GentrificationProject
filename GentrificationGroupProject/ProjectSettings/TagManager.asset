@@ -13,6 +13,7 @@ TagManager:
   - Clock
   - Notebook
   - Remove?
+  - Wallet
   layers:
   - Default
   - TransparentFX

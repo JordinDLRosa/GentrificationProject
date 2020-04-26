@@ -88,14 +88,14 @@ public class GamePlayManager : MonoBehaviour {
 
     // These are the text objects
     public Gradient stressedBar;
-    [SerializeField] public Text textDate;
-    [SerializeField] public Text textTime;
-    [SerializeField] Text textSavings;
+    public Text textDate;
+    public Text textTime;
+    public Text textSavings;
     [SerializeField] Text textEmotion;
-    [SerializeField] public Text textBills;
+    public Text textBills;
     [SerializeField] Text textHunger;
     [SerializeField] GameObject StressBarBox;
-    [SerializeField] public Text currentMealsInFridge;
+    public int currentMealsInFridge;
 
     // Start is called before the first frame update
     void Start() {

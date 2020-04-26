@@ -27,10 +27,16 @@ public class playerInteraction : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
             if (Physics.Raycast(ray, out hit, 100.0f)) {
                 if (hit.transform != null) {
+                    if (hit.collider.gameObject.tag == "Wallet") {
+                        DisplayObject(hit.transform.gameObject);
+                        gameManagerScript.textSavings.enabled = true;
+                        StartCoroutine(WaitForSec());
+
+                    }
                     if (hit.collider.gameObject.tag == "ComputerForNow") {
                         DisplayObject(hit.transform.gameObject);
                         gameManagerScript.payBills();
-                        //gameManagerScript.textBills.enabled = true;
+                        gameManagerScript.textBills.enabled = true;
                         StartCoroutine(WaitForSec());
                         if (gameManagerScript.getBillsDisplay() == "") {
 
@@ -100,6 +106,7 @@ public class playerInteraction : MonoBehaviour {
                     }
                     IEnumerator WaitForSec() {
                         yield return new WaitForSeconds(5);
+                        gameManagerScript.textSavings.enabled = false;
                         gameManagerScript.textDate.enabled = false;
                         gameManagerScript.textTime.enabled = false;
                         gameManagerScript.textBills.enabled = false;
