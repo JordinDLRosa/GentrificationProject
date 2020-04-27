@@ -9,6 +9,15 @@ public class playerInteraction : MonoBehaviour {
     public GameObject uiObjectDate;
     public GameObject uiObjectTime;
     public Text paidBills;
+    public Text textAlerts;
+    private string[] alerts = { "Rent is coming up. \n I should check my book to see the due date and the amount due",
+    "The gas bill is coming up. \n I should check my book to see the due date and the amount due",
+    "The electricity bill is coming up. \n I should check my book to see the due date and the amount due",
+    "The cell bill is coming up. \n I should check my book to see the due date and the amount due"
+    };
+
+
+    float turnOff = 0f;
     private void Awake() {
         gameManagerScript = GameObject.FindObjectOfType<GamePlayManager>();
     }
@@ -17,9 +26,49 @@ public class playerInteraction : MonoBehaviour {
         gameManagerScript.textDate.enabled = false;
         gameManagerScript.textTime.enabled = false;
         gameManagerScript.textBills.enabled = false;
+        textAlerts.enabled = false;
     }
     private void Update() {
         GetObject();
+        alertUpdates();
+
+        turnOff += Time.deltaTime;
+        if (turnOff >= 2f) {
+            textAlerts.enabled = false;
+        }
+    }
+    private void alertUpdates() {
+        if (gameManagerScript.rentPaid == false && gameManagerScript.currentDay > 25 && gameManagerScript.currentHour == 6 && gameManagerScript.timeStart < 2f) {
+            textAlerts.enabled = true;
+            textAlerts.text = alerts[0];
+            turnOff = 0f;
+        }
+        if (gameManagerScript.rentPaid == false && gameManagerScript.currentDay < 4 && gameManagerScript.currentHour == 6 && gameManagerScript.timeStart < 2f) {
+            textAlerts.enabled = true;
+            textAlerts.text = alerts[0];
+            turnOff = 0f;
+        }
+        if (gameManagerScript.gameFirstDay != true && gameManagerScript.gasPaid == false && gameManagerScript.currentDay > 4 && gameManagerScript.currentHour == 6 && gameManagerScript.timeStart < 2f) {
+            textAlerts.enabled = true;
+            textAlerts.text = alerts[1];
+            turnOff = 0f;
+        }
+        if (gameManagerScript.gameFirstDay != true && gameManagerScript.electricityPaid == false && gameManagerScript.currentDay > 10 && gameManagerScript.currentHour == 6 && gameManagerScript.timeStart < 2f) {
+            textAlerts.enabled = true;
+            textAlerts.text = alerts[2];
+            turnOff = 0f;
+        }
+        if (gameManagerScript.gameFirstDay != true && gameManagerScript.cellPaid == false && gameManagerScript.currentDay > 15 && gameManagerScript.currentHour == 6 && gameManagerScript.timeStart < 2f) {
+            textAlerts.enabled = true;
+            textAlerts.text = alerts[3];
+            turnOff = 0f;
+        }
+        if (gameManagerScript.daysHungry > 2) {
+            textAlerts.enabled = true;
+            textAlerts.text = "I should eat, I haven't eaten in " + gameManagerScript.daysHungry + "days.";
+            turnOff = 0f;
+
+        }
     }
     private void GetObject() {
 

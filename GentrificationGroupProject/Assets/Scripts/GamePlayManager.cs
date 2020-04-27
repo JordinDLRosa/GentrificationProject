@@ -4,25 +4,14 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class GamePlayManager : MonoBehaviour {
-    // These are the part of the game that will show a life event
-    // total life events so far: 5 : so 0 - 4
-    System.Random randomEvent = new System.Random();
-
-    // Currently Not Implemented:
-    private string[] lifeEvent = { "Got into an accident at work, I have to pay medical bills",
-        "The toilet got clogged... called a plumber. Have to pay this repair bill",
-        "Rodents in the house, had to call an exterminator", "Family called asking for money", "Friend called asking me for money"};
-    private int[] lifeEventCost = { 200, 50, 50, 100, 75 };
-    private bool luckDecidedAlready = true;
 
     // These will be for monitoring the date, time, day of the week, month and year.
     // These will be for monitoring the day of the week
     private string[] daysWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     private int currentDayOfTheWeek = 4;
-    private int maxDayOfTheWeek = 6;
 
     // these are the time and date parts of the game
-    bool gameFirstDay = true;
+    public bool gameFirstDay = true;
     public int currentMonth = 04;
     private int previousMonth;
     private int nextMonth;
@@ -35,8 +24,6 @@ public class GamePlayManager : MonoBehaviour {
     private int lastHourOfTheDay = 11;
 
     // this will be the part of the game that monitors your emotions and your hunger
-    public string emotion;
-    private string[] emotionalStatus = { "Normal", "Feeing Hungry", "Feeling Sick", "Sick & Hungry", "Stressed" };
     public int daysHungry = 0;
     public bool eaten = false;
     private string[] hungerLevel = { "Hungry: Full", "Hungry: Yes", "Hungry: Very Hungry" };
@@ -49,16 +36,10 @@ public class GamePlayManager : MonoBehaviour {
 
     // This will be part of the game that monitors savings, bills and late fee penalties.
     public int savings = 1500;
+    private int minSavings = 100;
     private bool paid = true;
 
     private int monthsBehind = 0; // If months behind rent is equal to 2 you are evicted / lose the game.
-
-
-    // This will be the part of the game that alerts players to bill.
-    private string alertsDisplayed = "";
-    public string[] alerts = { "Rent is coming up.", "Gas bill is coming up.", "Electricity bill is coming up.", "Cell bill is coming up." };
-    public List<string> alertMe = new List<string>();
-    public bool updateAlert = false;
 
     // This will be the part of the game that monitors the upcoming bills.
     private string billsDisplayed = "";
@@ -92,16 +73,11 @@ public class GamePlayManager : MonoBehaviour {
     public bool autoCell = false;
 
     float targetAmount;
-    public Image stressedBarImg;
-
     [Header("Text Settings")]
     // These are the text objects
-    public Gradient stressedBar;
     public Text textDate;
     public Text textTime;
     public Text textSavings;
-    public Text textAlerts;
-    public Text textEmotion; // will remove this
     public Text textBills;
     [SerializeField] Text textHunger;
     [SerializeField] GameObject StressBarBox;
@@ -109,11 +85,8 @@ public class GamePlayManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        emotion = emotionalStatus[0];
         stressBar = StressBarBox.GetComponent<SpriteRenderer>();
         updateBill = true;
-
-        targetAmount = stressedBarImg.fillAmount;
     }
 
     // Update is called once per frame
@@ -123,15 +96,10 @@ public class GamePlayManager : MonoBehaviour {
         monitorHunger();
         stressBarChange();
         monitorPayDay();
-        monitorEmotion();
         addToBills();
         if (updateBill) {
             displayBills();
             updateBill = false;
-        }
-        if (updateAlert) {
-            displayAlerts();
-            updateAlert = false;
         }
     }
     /// <summary>
@@ -142,81 +110,22 @@ public class GamePlayManager : MonoBehaviour {
             // end the game, because you were evicted.
         }
     }
-    private void lifeSucks() {
-        if (currentDay % 14 == 0 && luckDecidedAlready == false) {
-            int luck = randomEvent.Next(1, 100000);
-            int lifeEventHappened = randomEvent.Next(1, 6);
-            if (luck < 5 && luck > 1) {
-                Debug.Log(lifeEvent[lifeEventHappened]);
-            }
-        }
-        luckDecidedAlready = true;
-    }
-    private void stressGradientChange() {
-
-    }
-    // Will combine monitor emotion and StressBarChange
+    // Will monitor StressBarChange
     private void stressBarChange() {
-        // This controls the color of the bar. We take our custom Color Gradient and use the fillAmount property to tell use where in the...
-        //...color gradient to take the color from (fillAmount is a value between 0-1). 
-        if (rentPaid == false && gasPaid == false && electricityPaid == false && cellPaid == false) {
-            stressState = 5;
-            SetNewFillAmount(stressState, relaxedState);
+        if (rentPaid == false && gasPaid == false && electricityPaid == false && cellPaid == false && gameFirstDay == false) {
+            stressBar.color = new Color(255, 0, 0);
         }
-        if (rentPaid == false && currentDay < 4) {
-            stressState = 2;
-            SetNewFillAmount(stressState, relaxedState);
+        if (savings - totalBillsDues < minSavings) {
+            stressBar.color = new Color(240, 51, 0);
         }
-        if (emotion == "Sick") {
-            stressBar.color = Color.green;
-        }
-        if (emotion == emotionalStatus[4] && savings - 300 < totalBillsDues) {
-            stressBar.color = Color.red;
-        }
-        float s = 2;
-        stressedBarImg.fillAmount = Mathf.Lerp(stressedBarImg.fillAmount, targetAmount, s * Time.deltaTime);
-        stressedBarImg.color = stressedBar.Evaluate(stressedBarImg.fillAmount);
-    }
-    public void monitorEmotion() {
-        //{ "Normal", "Hungry", "Sick", "Sick & Hungry" };
-        textEmotion.text = "Emotion: " + emotion;
-        if (daysHungry == 0) {
-            emotion = emotionalStatus[0];
-        }
-        if (daysHungry > 0) {
-            // this puts you at hungry
-            emotion = emotionalStatus[1];
-        }
-        if (daysHungry > 4 & emotion == emotionalStatus[1]) {
-            // this puts you at sick
-            emotion = emotionalStatus[2];
-        }
-        if (daysHungry > 6 & emotion == emotionalStatus[2]) {
-            // this puts you at hungry and sick
-            emotion = emotionalStatus[3];
-        }
-        if (savings < totalBillsDues) {
-            emotion = emotionalStatus[4];
-        }
-        if (eaten == true) {
-            if (emotion == emotionalStatus[1]) {
-                emotion = emotionalStatus[0];
-            }
-            if (emotion == emotionalStatus[2]) {
-                emotion = emotionalStatus[1];
-            }
+        else {
+            stressBar.color = new Color(0, 255, 0);
         }
     }
-    /// <summary>
-    /// The following code is now free bugs, document any changes.
-    /// </summary>\
-    ///
-
-
     // monitorTime is bug free now
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
-        float speedUp = 30; // speedUp Time, will adjust for final game
+        float speedUp = 5; // speedUp Time, will adjust for final game
         timeStart += Time.deltaTime * speedUp;
         if (currentHour > lastHourOfTheDay - 1) {
             gameFirstDay = false;
@@ -337,9 +246,7 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
     // monitorPayDay is now bug free
-    private void monitorPayDay() {
-        // ensures you get a single payment
-        // luckDecidedAlready = false;
+    private void monitorPayDay() { // ensures you get a single payment
         // You get paid every Sunday
         if (currentDayOfTheWeek == 6) {
             paid = false;
@@ -353,16 +260,12 @@ public class GamePlayManager : MonoBehaviour {
     private void addToBills() {
         if (currentMonth != 2 && currentDay > 26 && displayedBills == false) {
             updateBill = true;
-            updateAlert = true;
-            alertMe[0] = alerts[0];
             dueBills.Add(bills[0] + dueBy + nextMonth + "/" + lastDayPayRent.ToString()); // adds rent to upComingBills from bills[0].
             totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
         }
         else {
             if (currentMonth == 2 && currentDay > 23 && displayedBills == false) {
                 updateBill = true;
-                updateAlert = true;
-                alertMe[0] = alerts[0];
                 dueBills.Add(bills[0] + dueBy + nextMonth + "/" + lastDayPayRent.ToString()); // adds rent to upComingBills from bills[0].
                 totalBillsDues += livingCost[0]; // adds rent to the totalBillsDue.
             }
@@ -372,8 +275,6 @@ public class GamePlayManager : MonoBehaviour {
         }
         if (currentDay == 5 && displayedBills == false && gasPaid == false) {
             updateBill = true;
-            updateAlert = true;
-            alertMe[1] = alerts[1];
             dueBills.Add(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString()); // adds Gas Bill to upComingBills from bills[1].
             totalBillsDues += livingCost[1]; // adds Gas Bill to the totalBillsDue.
         }
@@ -382,8 +283,6 @@ public class GamePlayManager : MonoBehaviour {
         }
         if (currentDay == 10 && displayedBills == false && electricityPaid == false) {
             updateBill = true;
-            updateAlert = true;
-            alertMe[3] = alerts[3];
             dueBills.Add(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString()); // adds Electricity Bill to upComingBills from bills[2].
             totalBillsDues += livingCost[2]; // adds Electricity Bill to the totalBillsDue.
         }
@@ -392,8 +291,6 @@ public class GamePlayManager : MonoBehaviour {
         }
         if (currentDay == 16 && displayedBills == false && cellPaid == false) {
             updateBill = true;
-            updateAlert = true;
-            alertMe[4] = alerts[4];
             dueBills.Add(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString()); // adds Phone Bill to upComingBills from bills[3].
             totalBillsDues += livingCost[3]; // adds Phone Bill to the totalBillsDue.
         }
@@ -407,13 +304,6 @@ public class GamePlayManager : MonoBehaviour {
         }
         textBills.text = billsDisplayed + "\n" + "Total Due: " + totalBillsDues.ToString();
         displayedBills = true;
-    }
-    private void displayAlerts() {
-        alertsDisplayed = "";
-        foreach (string msg in alertMe) {
-
-            alertsDisplayed = alertsDisplayed + msg.ToString() + "\n";
-        }
     }
     // This method is used to pay the bills.
     // payBills is now bugFree
@@ -438,7 +328,6 @@ public class GamePlayManager : MonoBehaviour {
             rentPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[0] + dueBy + currentMonth + "/" + lastDayPayRent, "");
             dueBills.Remove(bills[0] + dueBy + currentMonth + "/" + lastDayPayRent.ToString());
-            alertsDisplayed = alertsDisplayed.Replace(alerts[0], "");
             totalBillsDues -= livingCost[0];
             updateBill = true;
         }
@@ -446,7 +335,6 @@ public class GamePlayManager : MonoBehaviour {
             savings -= livingCost[1];
             gasPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString(), "");
-            alertsDisplayed = alertsDisplayed.Replace(alerts[1], "");
             dueBills.Remove(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString());
             totalBillsDues -= livingCost[1];
             updateBill = true;
@@ -455,7 +343,6 @@ public class GamePlayManager : MonoBehaviour {
             savings -= livingCost[1] + lateFee;
             gasPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString(), "");
-            alertsDisplayed = alertsDisplayed.Replace(alerts[1], "");
             dueBills.Remove(bills[1] + dueBy + currentMonth + "/" + lastDayPayGas.ToString());
             totalBillsDues -= livingCost[1];
             updateBill = true;
@@ -464,7 +351,6 @@ public class GamePlayManager : MonoBehaviour {
             savings -= livingCost[2];
             electricityPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString(), "");
-            alertsDisplayed = alertsDisplayed.Replace(alerts[2], "");
             dueBills.Remove(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString());
             totalBillsDues -= livingCost[2];
             updateBill = true;
@@ -473,7 +359,6 @@ public class GamePlayManager : MonoBehaviour {
             savings -= livingCost[2] + lateFee;
             electricityPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString(), "");
-            alertsDisplayed = alertsDisplayed.Replace(alerts[2], "");
             dueBills.Remove(bills[2] + dueBy + currentMonth + "/" + lastDayPayElectric.ToString());
             totalBillsDues -= livingCost[2];
             updateBill = true;
@@ -482,7 +367,6 @@ public class GamePlayManager : MonoBehaviour {
             savings -= livingCost[3];
             cellPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString(), "");
-            alertsDisplayed = alertsDisplayed.Replace(alerts[3], "");
             dueBills.Remove(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString());
             totalBillsDues -= livingCost[3];
             updateBill = true;
@@ -491,56 +375,18 @@ public class GamePlayManager : MonoBehaviour {
             savings -= livingCost[3] + lateFee;
             cellPaid = true;
             billsDisplayed = billsDisplayed.Replace(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString(), "");
-            alertsDisplayed = alertsDisplayed.Replace(alerts[3], "");
             dueBills.Remove(bills[3] + dueBy + currentMonth + "/" + lastDayPayCell.ToString());
             totalBillsDues -= livingCost[3];
             updateBill = true;
         }
         else {
-            alertsDisplayed = "No Bills to Pay, Good Job!";
         }
-    }
-    private void SetNewFillAmount(int fill, int maxFill) {
-        targetAmount = (float)fill / (float)maxFill;////
     }
     public string getBillsDisplay() {
         string billsTransfer = billsDisplayed;
         return billsTransfer;
     }
-    public string getAlerts() {
-        string myAlerts = alertsDisplayed;
-        return myAlerts;
-    }
     public void monitorSavings() {
         textSavings.text = "Savings: $ " + savings.ToString();
-    }
-    public void updateAlerts() {
-        if (rentPaid == false && currentDay > 27 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
-            textAlerts.text = getAlerts();
-            textAlerts.enabled = true;
-            WaitForSec();
-        }
-        if (gasPaid == false && currentDay > 5 && currentDay < 12 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
-            alertMe[1] = alerts[1];
-            textAlerts.text = getAlerts();
-            textAlerts.enabled = true;
-            WaitForSec();
-        }
-        if (electricityPaid == false && currentDay > 10 && currentDay < 17 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
-            alertMe[2] = alerts[2];
-            textAlerts.text = getAlerts();
-            textAlerts.enabled = true;
-            WaitForSec();
-        }
-        if (cellPaid == false && currentDay > 17 &&  currentDay < 23 && currentHour == 6 && timeStart > 1 && timeStart < 5) {
-            alertMe[3] = alerts[3];
-            textAlerts.text = getAlerts();
-            textAlerts.enabled = true;
-            WaitForSec();
-        }
-        IEnumerator WaitForSec() {
-            yield return new WaitForSeconds(5);
-            textAlerts.enabled = false;
-        }
     }
 } // end of class
