@@ -132,7 +132,7 @@ public class GamePlayManager : MonoBehaviour {
     // monitorTime is bug free now
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
-        float speedUp = 200; // speedUp Time, will adjust for final game
+        float speedUp = 5f; // speedUp Time, will adjust for final game
         timeStart += Time.deltaTime * speedUp;
         if (currentHour > lastHourOfTheDay - 1) {
             gameFirstDay = false;
