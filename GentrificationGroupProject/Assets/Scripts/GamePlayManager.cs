@@ -38,6 +38,7 @@ public class GamePlayManager : MonoBehaviour {
     public int savings = 1500;
     private int minSavings = 100;
     private bool paid = true;
+    private bool onceAMonth = true;
 
     private int monthsBehind = 1; // If months behind rent is equal to 2 you are evicted / lose the game.
 
@@ -89,10 +90,12 @@ public class GamePlayManager : MonoBehaviour {
     void Start() {
         stressBar = StressBarBox.GetComponent<SpriteRenderer>();
         updateBill = true;
+        onceAMonth = false;
     }
 
     // Update is called once per frame
     void Update() {
+        gameOver();
         monitorTime();
         monitorDate();
         monitorHunger();
@@ -103,7 +106,6 @@ public class GamePlayManager : MonoBehaviour {
             displayBills();
             updateBill = false;
         }
-        gameOver();
     }
     /// <summary>
     /// The Following Code has not been implemented or requires adjustment
@@ -262,6 +264,9 @@ public class GamePlayManager : MonoBehaviour {
     }
     // addToBills is now bugFree
     private void addToBills() {
+        if (currentDay == lastDayOfTheMonth && onceAMonth == true && gameFirstDay == false) {
+            onceAMonth = false;
+        }
         if (currentMonth != 2 && currentDay > 26 && displayedBills == false) {
             updateBill = true;
             dueBills.Add(bills[0] + dueBy + nextMonth + "/" + lastDayPayRent.ToString()); // adds rent to upComingBills from bills[0].
@@ -276,6 +281,11 @@ public class GamePlayManager : MonoBehaviour {
         }
         if (currentDay == 4 && displayedBills == true) {
             displayedBills = false;
+        }
+        if (currentDay > 4 && rentPaid == false && gameFirstDay == false) {
+            if (onceAMonth == false) {
+                monthsBehind++;
+            }
         }
         if (currentDay == 5 && displayedBills == false && gasPaid == false) {
             updateBill = true;
