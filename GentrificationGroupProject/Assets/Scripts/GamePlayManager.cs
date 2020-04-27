@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class GamePlayManager : MonoBehaviour {
 
     // These will be for monitoring the date, time, day of the week, month and year.
@@ -113,7 +114,7 @@ public class GamePlayManager : MonoBehaviour {
     private void gameOver() {
         if (monthsBehind == 2) {
             // end the game, because you were evicted.
-            menu.QuitGame();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
     // Will monitor StressBarChange
