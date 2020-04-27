@@ -15,6 +15,7 @@ TagManager:
   - Remove?
   - Wallet
   - Fridge
+  - Lamp
   layers:
   - Default
   - TransparentFX

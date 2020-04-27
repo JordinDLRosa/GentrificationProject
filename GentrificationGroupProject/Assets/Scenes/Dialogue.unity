@@ -222,7 +222,8 @@ MonoBehaviour:
 
 
     Interactable Objects are the Clock,
-    Calendar, Phone, Stove, Bed, and Computer'
+    Calendar, Phone, Stove, Fridge, Computer, Bed, Notebook and Wallet (Grey Block
+    next to the bed)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -291,12 +292,12 @@ MonoBehaviour:
   m_margin: {x: -338.54688, y: 0, z: -324.15625, w: 0}
   m_textInfo:
     textComponent: {fileID: 323007598}
-    characterCount: 427
+    characterCount: 481
     spriteCount: 0
-    spaceCount: 76
-    wordCount: 75
+    spaceCount: 85
+    wordCount: 84
     linkCount: 0
-    lineCount: 12
+    lineCount: 13
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
