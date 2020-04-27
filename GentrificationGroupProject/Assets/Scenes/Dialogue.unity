@@ -188,7 +188,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 53.541626, y: 111}
+  m_AnchoredPosition: {x: 53.541626, y: 304.68707}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &323007598
@@ -211,19 +211,24 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Your name is Sam and you work a 9-5 throughout the week. You''re currently
     living in a Gentrified neighborhood in New York City. Everything has risen up
-    in price and it''s becoming more difficult to live in your residence. How will
-    you survive? Is there any hope left for you? What will you do? What can you do?
-    It''s for you to decide.
+    in price and it''s becoming more difficult to live in your residence. You were
+    behind on rent once, if you fall behind on rent again. You will be evicted from
+    your residence. How will you survive? Is there any hope left for you? What will
+    you do? What can you do? It''s for you to decide.
 
 
     Controls:
 
-    Left Mouse Click to interact with
-    objects
+    Left Mouse
+    Click to interact with objects
 
 
-    Interactable Objects are the Clock, Calendar, Phone, Stove, Fridge,
-    Computer, Bed, Notebook and Wallet (Grey Block next to the bed)'
+    Interactable Objects are the Clock, Calendar,
+    Phone, Stove, Fridge, Computer, Bed, Notebook and Wallet (Grey Block next to
+    the bed)
+
+
+    Set Resolution to 1920 x 1080'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -292,12 +297,12 @@ MonoBehaviour:
   m_margin: {x: -338.54688, y: 0, z: -324.15625, w: 0}
   m_textInfo:
     textComponent: {fileID: 323007598}
-    characterCount: 519
+    characterCount: 655
     spriteCount: 0
-    spaceCount: 92
-    wordCount: 91
+    spaceCount: 119
+    wordCount: 117
     linkCount: 0
-    lineCount: 14
+    lineCount: 18
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -812,7 +817,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 53.541626, y: 332.31293}
+  m_AnchoredPosition: {x: 53.541626, y: 431}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1190154896
