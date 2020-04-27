@@ -39,7 +39,7 @@ public class GamePlayManager : MonoBehaviour {
     private int minSavings = 100;
     private bool paid = true;
 
-    private int monthsBehind = 0; // If months behind rent is equal to 2 you are evicted / lose the game.
+    private int monthsBehind = 1; // If months behind rent is equal to 2 you are evicted / lose the game.
 
     // This will be the part of the game that monitors the upcoming bills.
     private string billsDisplayed = "";
@@ -84,6 +84,8 @@ public class GamePlayManager : MonoBehaviour {
     public Text currentMealsInFridge;
 
     // Start is called before the first frame update
+
+    MainMenu menu;
     void Start() {
         stressBar = StressBarBox.GetComponent<SpriteRenderer>();
         updateBill = true;
@@ -101,6 +103,7 @@ public class GamePlayManager : MonoBehaviour {
             displayBills();
             updateBill = false;
         }
+        gameOver();
     }
     /// <summary>
     /// The Following Code has not been implemented or requires adjustment
@@ -108,6 +111,7 @@ public class GamePlayManager : MonoBehaviour {
     private void gameOver() {
         if (monthsBehind == 2) {
             // end the game, because you were evicted.
+            menu.QuitGame();
         }
     }
     // Will monitor StressBarChange
@@ -125,7 +129,7 @@ public class GamePlayManager : MonoBehaviour {
     // monitorTime is bug free now
     private void monitorTime() {
         textTime.text = "Time: " + currentHour + ":" + (Mathf.Round(timeStart) + " pm".ToString());
-        float speedUp = 5; // speedUp Time, will adjust for final game
+        float speedUp = 200; // speedUp Time, will adjust for final game
         timeStart += Time.deltaTime * speedUp;
         if (currentHour > lastHourOfTheDay - 1) {
             gameFirstDay = false;
